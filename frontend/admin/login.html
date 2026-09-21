@@ -522,7 +522,7 @@
           }
         } catch (err) {
           console.error('Login error:', err);
-          errorText.textContent = 'Unable to reach backend server. Please verify backend is running on port 5000.';
+          errorText.textContent = err.message || 'Unable to connect to the backend server. Please check database connection.';
           errorDiv.classList.add('show');
         } finally {
           submitBtn.disabled = false;
