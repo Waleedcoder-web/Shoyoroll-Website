@@ -1,15 +1,22 @@
-const { Client, Pool } = require('pg');
+const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '1234',
-};
+const isProduction = process.env.NODE_ENV === 'production';
+const connectionString = process.env.DATABASE_URL;
 
-const targetDbName = process.env.DB_NAME || 'blueneedle_db';
+const pool = connectionString
+  ? new Pool({
+      connectionString,
+      ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
+    })
+  : new Pool({
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD || '1234',
+      database: process.env.DB_NAME || 'blueneedle_db',
+    });
 
 const initSql = `
 -- Admin users table
@@ -47,7 +54,7 @@ CREATE TABLE IF NOT EXISTS products (
 -- Alter table in case products already existed
 ALTER TABLE products ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]'::jsonb;
 
--- Uploads table (Storing file metadata and URLs)
+-- Uploads table
 CREATE TABLE IF NOT EXISTS uploads (
   id SERIAL PRIMARY KEY,
   filename VARCHAR(255) NOT NULL,
@@ -59,7 +66,7 @@ CREATE TABLE IF NOT EXISTS uploads (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Inquiries table (Quote requests and contact submissions)
+-- Inquiries table
 CREATE TABLE IF NOT EXISTS inquiries (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -84,81 +91,34 @@ VALUES
   ('Grappling Shorts', 'Shorts', 'BN-SHORTS-001', 'Durable and flexible shorts designed for grappling and No-Gi training.', 'Fight and grappling shorts with reinforced stress points, split or slit legs, and a secure drawcord or hook closure.', E'4-way stretch polyester\nMicro polyester twill\nStretch mesh panels', 180, '4-Way Stretch', '["Black", "Navy", "Camo", "Custom"]'::jsonb, '["28", "30", "32", "34", "36", "38"]'::jsonb, 50, '../assets/product-shorts.jpg', '../products/grappling-shorts.html', true),
   ('Kids & Custom Gi', 'BJJ Gis', 'BN-KIDS-001', 'Tailored sizing for youth athletes and full-custom academy batches.', 'Lightweight durable Gis with elastic waistbands for youth athletes and custom academy patch packages.', E'Cotton pearl weave 350 GSM\nElastic waist twill pants\nReinforced knees', 350, 'Pearl Weave', '["White", "Blue", "Black", "Pink"]'::jsonb, '["M00", "M0", "M1", "M2", "M3", "M4"]'::jsonb, 30, '../assets/product-gi.jpg', '../products/custom-bjj-gear.html', true)
 ON CONFLICT (sku) DO NOTHING;
-
--- Seed initial inquiries if empty
-INSERT INTO inquiries (name, email, phone, company, country, product_interest, quantity, message, status)
-VALUES
-  ('Marcus Leite', 'marcus@atlasgrappling.example', '+55 11 9xxx xxxx', 'Atlas Grappling Co.', 'Brazil', 'BJJ Gi', 600, 'Looking for 550 GSM pearl weave in navy and white, our own collar taping and woven labels.', 'new'),
-  ('Sofia Novak', 'sofia@northline.example', '+420 7xx xxx xxx', 'Northline Distribution', 'Czech Republic', 'Rash Guards', 1200, 'Full sublimation, four artworks, mixed size run XS-3XL. Need sample within three weeks.', 'in-review'),
-  ('David Hayes', 'david@apexcombat.example', '+1 415 xxx xxxx', 'Apex Combat Sports', 'United States', 'Grappling Shorts', 400, '4-way stretch grappling shorts with internal drawcord and silicone waistband.', 'quoted')
-ON CONFLICT DO NOTHING;
 `;
 
-async function initializeDatabase() {
-  console.log('----------------------------------------------------');
-  console.log(`🔍 Checking if database "${targetDbName}" exists...`);
-  console.log('----------------------------------------------------');
+let hasInitialized = false;
 
-  const rootClient = new Client({
-    ...dbConfig,
-    database: 'postgres',
-  });
-
+async function autoInitializeTables() {
+  if (hasInitialized) return;
   try {
-    await rootClient.connect();
-    const checkDbRes = await rootClient.query(
-      'SELECT 1 FROM pg_database WHERE datname = $1',
-      [targetDbName]
-    );
-
-    if (checkDbRes.rowCount === 0) {
-      console.log(`📦 Database "${targetDbName}" does not exist. Creating it now...`);
-      await rootClient.query(`CREATE DATABASE "${targetDbName}"`);
-      console.log(`✅ Database "${targetDbName}" created successfully!`);
-    } else {
-      console.log(`✅ Database "${targetDbName}" already exists.`);
-    }
-  } catch (err) {
-    console.error(`❌ Failed connecting to PostgreSQL:`, err.message);
-    process.exit(1);
-  } finally {
-    await rootClient.end();
-  }
-
-  console.log(`\n📄 Syncing tables and seeds in "${targetDbName}"...`);
-  const appPool = new Pool({
-    ...dbConfig,
-    database: targetDbName,
-  });
-
-  try {
-    await appPool.query(initSql);
+    await pool.query(initSql);
 
     // Seed or update admin user Waleed with encrypted password '8956'
     const passwordHash = await bcrypt.hash('8956', 10);
-    await appPool.query(
+    await pool.query(
       `INSERT INTO admin_users (username, email, password_hash, role)
        VALUES ($1, $2, $3, $4)
        ON CONFLICT (username) 
        DO UPDATE SET password_hash = EXCLUDED.password_hash`,
-      ['Waleed', 'waleed@blueneedle.com', passwordHash, 'admin']
+      ['Waleed', 'blueneedle3@gmail.com', passwordHash, 'admin']
     );
 
-    console.log('✅ Admin user "Waleed" verified in PostgreSQL.');
-    console.log('✅ Tables "admin_users", "products", "uploads", and "inquiries" ready!');
-    console.log('----------------------------------------------------');
-    console.log('🎉 Database initialization complete!');
-    console.log('----------------------------------------------------');
+    hasInitialized = true;
+    console.log('[Database]: Auto-synced schema & verified admin user "Waleed" (password: 8956)');
   } catch (err) {
-    console.error('❌ Error executing table schema:', err.message);
-    process.exit(1);
-  } finally {
-    await appPool.end();
+    console.warn('[Database Auto-Init]:', err.message);
   }
 }
 
-if (require.main === module) {
-  initializeDatabase();
-}
-
-module.exports = { initializeDatabase };
+module.exports = {
+  initializeDatabase: autoInitializeTables,
+  autoInitializeTables,
+  initSql,
+};

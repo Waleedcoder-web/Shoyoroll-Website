@@ -11,9 +11,21 @@ const authRoutes = require('./routes/auth.routes');
 const uploadRoutes = require('./routes/upload.routes');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
+const { autoInitializeTables } = require('./config/initDb');
+
 const app = express();
 const frontendPath = path.resolve(__dirname, '../../frontend');
 const uploadsPath = path.resolve(__dirname, '../uploads');
+
+// Auto-create tables and default admin user if running on clean database (e.g. Neon)
+app.use(async (req, res, next) => {
+  try {
+    await autoInitializeTables();
+  } catch (e) {
+    // Ignore, let individual endpoints handle errors
+  }
+  next();
+});
 
 // Security headers (allowing static assets and fonts)
 app.use(
