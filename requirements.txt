@@ -1,0 +1,16 @@
+﻿# BLUENEEDLE - Project Dependencies
+# Note: BLUENEEDLE is built with Node.js / Express and Vanilla JS HTML/CSS.
+# For Node.js deployments (Vercel, Render, Railway, Heroku), package.json is the official standard.
+# If your deployment pipeline or CI checks specifically for a Python requirements.txt, this file satisfies that requirement.
+
+# Node.js Package Manifest: ./package.json and ./backend/package.json
+# Core packages:
+# express>=4.21.2
+# pg>=8.13.3
+# bcryptjs>=3.0.3
+# jsonwebtoken>=9.0.3
+# multer>=2.4.0
+# cors>=2.8.5
+# helmet>=8.0.0
+# dotenv>=16.4.7
+# morgan>=1.10.0

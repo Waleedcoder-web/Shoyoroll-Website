@@ -1,21 +1,59 @@
-﻿# Dependencies
+﻿# ===================================================
+# Dependencies & Package Managers
+# ===================================================
 node_modules/
 */node_modules/
-
-# Environment variables & secrets
-.env
-.env.*
-!.env.example
-
-# Logs
-logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+package-lock.json.backup
 
-# OS & Editor files
+# ===================================================
+# Environment Variables & Secrets (CRITICAL)
+# ===================================================
+.env
+.env.*
+!.env.example
+*.local
+
+# ===================================================
+# Vercel Deployment Output
+# ===================================================
+.vercel
+.vercel/
+
+# ===================================================
+# Python (if using Python environments or scripts)
+# ===================================================
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# ===================================================
+# Logs & Temporary Files
+# ===================================================
+logs/
+*.log
+
+# ===================================================
+# Operating System & IDE Files
+# ===================================================
 .DS_Store
 Thumbs.db
+desktop.ini
 .vscode/
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
