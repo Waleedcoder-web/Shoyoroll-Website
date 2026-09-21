@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Overview | BLUENEEDLE</title>
+  <meta name="description" content="Internal overview of inquiries, quotes and production activity." />
+  <meta name="robots" content="noindex" />
+  
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="bg-secondary text-foreground font-sans antialiased">
+  <div class="min-h-screen bg-secondary">
+    <!-- Desktop Sidebar -->
+    <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col bg-navy-deep px-4 py-6 lg:flex">
+      <a href="index.html" class="flex items-center gap-2.5 px-2">
+        <img src="../assets/logo.png" alt="" width="512" height="512" class="h-8 w-8 object-contain" />
+        <span class="font-display text-base font-extrabold tracking-tight text-navy-foreground">
+          BLUENEEDLE
+        </span>
+      </a>
+      <p class="mt-1 px-2 text-[11px] uppercase tracking-[0.18em] text-navy-foreground/40">Admin</p>
+      
+      <div class="mt-8 flex-1">
+        <nav class="flex flex-col gap-1">
+          <a href="index.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium bg-electric text-electric-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            Overview
+          </a>
+          <a href="inquiries.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            Inquiries
+          </a>
+          <a href="products.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            Products
+          </a>
+          <a href="settings.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Site Settings
+          </a>
+          <a href="ui-kit.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="14" y="3" rx="1"/><path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/></svg>
+            UI Kit
+          </a>
+        </nav>
+      </div>
+
+      <a
+        href="../index.html"
+        class="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm text-navy-foreground/60 transition-colors hover:text-navy-foreground"
+      >
+        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        View website
+      </a>
+    </aside>
+
+    <!-- Main Container -->
+    <div class="lg:pl-64">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+        <div class="flex items-center gap-4 px-5 py-4 lg:px-8">
+          <button
+            type="button"
+            aria-label="Menu"
+            data-admin-menu-toggle
+            class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border lg:hidden"
+          >
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+          <div class="min-w-0 flex-1">
+            <h1 class="truncate font-display text-lg font-bold text-navy">Overview</h1>
+            <p class="truncate text-sm text-muted-foreground">A snapshot of inquiries and production activity</p>
+          </div>
+          <div>
+            <a href="inquiries.html" class="inline-flex items-center justify-center rounded-md bg-navy px-4 py-2 text-sm font-medium text-navy-foreground hover:bg-navy/90 transition-colors">
+              View inquiries
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div data-admin-mobile-nav class="hidden border-t border-border bg-navy-deep px-4 py-3 lg:hidden">
+          <nav class="flex flex-col gap-1">
+            <a href="index.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium bg-electric text-electric-foreground">Overview</a>
+            <a href="inquiries.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Inquiries</a>
+            <a href="products.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Products</a>
+            <a href="settings.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Site Settings</a>
+            <a href="ui-kit.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">UI Kit</a>
+            <a href="../index.html" class="mt-2 flex items-center gap-2 border-t border-white/10 pt-2 text-sm text-navy-foreground/60">View website &rarr;</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="px-5 py-8 lg:px-8">
+        <!-- Stats Cards -->
+        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="rounded-xl border border-border bg-card p-6 shadow-card">
+            <p class="text-sm text-muted-foreground">New inquiries</p>
+            <p class="mt-3 font-display text-3xl font-extrabold text-navy">12</p>
+            <p class="mt-1 text-xs text-electric">+4 this week</p>
+          </div>
+          <div class="rounded-xl border border-border bg-card p-6 shadow-card">
+            <p class="text-sm text-muted-foreground">Quotes sent</p>
+            <p class="mt-3 font-display text-3xl font-extrabold text-navy">31</p>
+            <p class="mt-1 text-xs text-electric">+6 this month</p>
+          </div>
+          <div class="rounded-xl border border-border bg-card p-6 shadow-card">
+            <p class="text-sm text-muted-foreground">Active projects</p>
+            <p class="mt-3 font-display text-3xl font-extrabold text-navy">8</p>
+            <p class="mt-1 text-xs text-electric">3 in sampling</p>
+          </div>
+          <div class="rounded-xl border border-border bg-card p-6 shadow-card">
+            <p class="text-sm text-muted-foreground">Countries served</p>
+            <p class="mt-3 font-display text-3xl font-extrabold text-navy">14</p>
+            <p class="mt-1 text-xs text-electric">2 new markets</p>
+          </div>
+        </div>
+
+        <!-- Inquiries & Activity split -->
+        <div class="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+          <!-- Latest inquiries -->
+          <section class="rounded-xl border border-border bg-card shadow-card">
+            <div class="flex items-center justify-between border-b border-border px-6 py-4">
+              <h2 class="font-display text-base font-bold text-navy">Latest inquiries</h2>
+              <a href="inquiries.html" class="text-sm font-medium text-electric hover:underline">See all</a>
+            </div>
+            <ul class="divide-y divide-border">
+              <li class="flex items-center justify-between gap-4 px-6 py-4">
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-navy">Atlas Grappling Co.</p>
+                  <p class="truncate text-sm text-muted-foreground">BJJ Gi &middot; 600 pcs &middot; Brazil</p>
+                </div>
+                <div class="flex shrink-0 items-center gap-3">
+                  <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-primary text-primary-foreground">New</span>
+                  <span class="hidden text-xs text-muted-foreground sm:inline">2 hours ago</span>
+                </div>
+              </li>
+              <li class="flex items-center justify-between gap-4 px-6 py-4">
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-navy">Northline Distribution</p>
+                  <p class="truncate text-sm text-muted-foreground">Rash Guards &middot; 1,200 pcs &middot; Czech Republic</p>
+                </div>
+                <div class="flex shrink-0 items-center gap-3">
+                  <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">In review</span>
+                  <span class="hidden text-xs text-muted-foreground sm:inline">Yesterday</span>
+                </div>
+              </li>
+              <li class="flex items-center justify-between gap-4 px-6 py-4">
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-navy">Ronin Academy</p>
+                  <p class="truncate text-sm text-muted-foreground">BJJ Belts &middot; 250 pcs &middot; United Kingdom</p>
+                </div>
+                <div class="flex shrink-0 items-center gap-3">
+                  <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Quoted</span>
+                  <span class="hidden text-xs text-muted-foreground sm:inline">3 days ago</span>
+                </div>
+              </li>
+              <li class="flex items-center justify-between gap-4 px-6 py-4">
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-navy">Kaido Fightwear</p>
+                  <p class="truncate text-sm text-muted-foreground">Grappling Shorts &middot; 800 pcs &middot; Japan</p>
+                </div>
+                <div class="flex shrink-0 items-center gap-3">
+                  <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Quoted</span>
+                  <span class="hidden text-xs text-muted-foreground sm:inline">5 days ago</span>
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Recent activity -->
+          <section class="rounded-xl border border-border bg-card shadow-card">
+            <div class="border-b border-border px-6 py-4">
+              <h2 class="font-display text-base font-bold text-navy">Recent activity</h2>
+            </div>
+            <ul class="space-y-5 px-6 py-5">
+              <li class="flex gap-3">
+                <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-electric"></span>
+                <div>
+                  <p class="text-sm text-navy">Quote sent to Kaido Fightwear</p>
+                  <p class="text-xs text-muted-foreground">1 hour ago</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-electric"></span>
+                <div>
+                  <p class="text-sm text-navy">Sample approved — Northline Distribution</p>
+                  <p class="text-xs text-muted-foreground">Yesterday</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-electric"></span>
+                <div>
+                  <p class="text-sm text-navy">New inquiry from Atlas Grappling Co.</p>
+                  <p class="text-xs text-muted-foreground">2 days ago</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-electric"></span>
+                <div>
+                  <p class="text-sm text-navy">Bulk production started — Ronin Academy belts</p>
+                  <p class="text-xs text-muted-foreground">4 days ago</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-electric"></span>
+                <div>
+                  <p class="text-sm text-navy">Export documents prepared — Southpaw Supply</p>
+                  <p class="text-xs text-muted-foreground">1 week ago</p>
+                </div>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/admin.js"></script>
+</body>
+</html>

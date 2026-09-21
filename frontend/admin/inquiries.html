@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inquiries | BLUENEEDLE Admin</title>
+  <meta name="description" content="Review and manage incoming B2B quote requests." />
+  <meta name="robots" content="noindex" />
+  
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="../css/styles.css" />
+  
+  <!-- Auth Route Guard -->
+  <script src="../js/auth.js"></script>
+</head>
+<body class="bg-secondary text-foreground font-sans antialiased">
+  <div class="min-h-screen bg-secondary">
+    <!-- Desktop Sidebar -->
+    <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col bg-navy-deep px-4 py-6 lg:flex">
+      <a href="index.html" class="flex items-center gap-2.5 px-2">
+        <img src="../assets/logo.png" alt="" width="512" height="512" class="h-8 w-8 object-contain" />
+        <span class="font-display text-base font-extrabold tracking-tight text-navy-foreground">
+          BLUENEEDLE
+        </span>
+      </a>
+      <p class="mt-1 px-2 text-[11px] uppercase tracking-[0.18em] text-navy-foreground/40">Admin</p>
+      
+      <div class="mt-8 flex-1">
+        <nav class="flex flex-col gap-1">
+          <a href="index.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            Overview
+          </a>
+          <a href="inquiries.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium bg-electric text-electric-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            Inquiries
+          </a>
+          <a href="products.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            Products
+          </a>
+          <a href="settings.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Site Settings
+          </a>
+          <a href="ui-kit.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="14" y="3" rx="1"/><path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/></svg>
+            UI Kit
+          </a>
+        </nav>
+      </div>
+
+      <a
+        href="../index.html"
+        class="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm text-navy-foreground/60 transition-colors hover:text-navy-foreground"
+      >
+        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        View website
+      </a>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="lg:pl-64">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+        <div class="flex items-center gap-4 px-5 py-4 lg:px-8">
+          <button
+            type="button"
+            aria-label="Menu"
+            data-admin-menu-toggle
+            class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border lg:hidden"
+          >
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+          <div class="min-w-0 flex-1">
+            <h1 class="truncate font-display text-lg font-bold text-navy">Inquiries</h1>
+            <p class="truncate text-sm text-muted-foreground">Quote requests submitted through the website</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button type="button" class="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent transition-colors">
+              Export CSV
+            </button>
+            <button type="button" data-action-logout class="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors cursor-pointer">
+              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <div data-admin-mobile-nav class="hidden border-t border-border bg-navy-deep px-4 py-3 lg:hidden">
+          <nav class="flex flex-col gap-1">
+            <a href="index.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Overview</a>
+            <a href="inquiries.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium bg-electric text-electric-foreground">Inquiries</a>
+            <a href="products.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Products</a>
+            <a href="settings.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Site Settings</a>
+            <a href="ui-kit.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">UI Kit</a>
+            <a href="../index.html" class="mt-2 flex items-center gap-2 border-t border-white/10 pt-2 text-sm text-navy-foreground/60">View website &rarr;</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="px-5 py-8 lg:px-8">
+        <!-- Filters & Search -->
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-inquiry-filter="all" class="rounded-md px-3.5 py-2 text-sm font-medium bg-navy text-navy-foreground transition-colors">All</button>
+            <button type="button" data-inquiry-filter="new" class="rounded-md px-3.5 py-2 text-sm font-medium bg-card text-muted-foreground hover:text-navy transition-colors">New</button>
+            <button type="button" data-inquiry-filter="in-review" class="rounded-md px-3.5 py-2 text-sm font-medium bg-card text-muted-foreground hover:text-navy transition-colors">In review</button>
+            <button type="button" data-inquiry-filter="quoted" class="rounded-md px-3.5 py-2 text-sm font-medium bg-card text-muted-foreground hover:text-navy transition-colors">Quoted</button>
+            <button type="button" data-inquiry-filter="closed" class="rounded-md px-3.5 py-2 text-sm font-medium bg-card text-muted-foreground hover:text-navy transition-colors">Closed</button>
+          </div>
+          <input
+            type="text"
+            data-inquiry-search
+            placeholder="Search company, country, product..."
+            class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring sm:max-w-xs"
+          />
+        </div>
+
+        <!-- Table -->
+        <div class="mt-6 overflow-hidden rounded-xl border border-border bg-card shadow-card">
+          <div class="relative w-full overflow-auto">
+            <table class="w-full caption-bottom text-sm">
+              <thead class="[&_tr]:border-b">
+                <tr class="border-b border-border transition-colors hover:bg-muted/50">
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Reference</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Company</th>
+                  <th class="hidden md:table-cell h-10 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
+                  <th class="hidden sm:table-cell h-10 px-4 text-left align-middle font-medium text-muted-foreground">Product</th>
+                  <th class="hidden lg:table-cell h-10 px-4 text-left align-middle font-medium text-muted-foreground">Quantity</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                  <th class="h-10 px-4 text-right align-middle font-medium text-muted-foreground">Action</th>
+                </tr>
+              </thead>
+              <tbody class="[&_tr:last-child]:border-0">
+                <!-- Row 1 -->
+                <tr data-inquiry-row data-status="new" class="border-b border-border transition-colors hover:bg-muted/50">
+                  <td class="p-4 align-middle font-mono text-xs text-muted-foreground">INQ-1042</td>
+                  <td class="p-4 align-middle">
+                    <span class="font-medium text-navy">Atlas Grappling Co.</span>
+                    <span class="block text-xs text-muted-foreground">Marcus Leite</span>
+                  </td>
+                  <td class="hidden md:table-cell p-4 align-middle text-muted-foreground">Brazil</td>
+                  <td class="hidden sm:table-cell p-4 align-middle text-muted-foreground">BJJ Gi</td>
+                  <td class="hidden lg:table-cell p-4 align-middle text-muted-foreground">600 pcs</td>
+                  <td class="p-4 align-middle">
+                    <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-primary text-primary-foreground">New</span>
+                  </td>
+                  <td class="p-4 align-middle text-right">
+                    <button
+                      type="button"
+                      data-view-inquiry
+                      data-id="INQ-1042"
+                      data-company="Atlas Grappling Co."
+                      data-name="Marcus Leite"
+                      data-country="Brazil"
+                      data-email="marcus@atlasgrappling.example"
+                      data-phone="+55 11 9xxx xxxx"
+                      data-product="BJJ Gi"
+                      data-qty="600 pcs"
+                      data-msg="Looking for 550 GSM pearl weave in navy and white, our own collar taping and woven labels."
+                      class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr data-inquiry-row data-status="in-review" class="border-b border-border transition-colors hover:bg-muted/50">
+                  <td class="p-4 align-middle font-mono text-xs text-muted-foreground">INQ-1041</td>
+                  <td class="p-4 align-middle">
+                    <span class="font-medium text-navy">Northline Distribution</span>
+                    <span class="block text-xs text-muted-foreground">Sofia Novak</span>
+                  </td>
+                  <td class="hidden md:table-cell p-4 align-middle text-muted-foreground">Czech Republic</td>
+                  <td class="hidden sm:table-cell p-4 align-middle text-muted-foreground">Rash Guards</td>
+                  <td class="hidden lg:table-cell p-4 align-middle text-muted-foreground">1,200 pcs</td>
+                  <td class="p-4 align-middle">
+                    <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">In review</span>
+                  </td>
+                  <td class="p-4 align-middle text-right">
+                    <button
+                      type="button"
+                      data-view-inquiry
+                      data-id="INQ-1041"
+                      data-company="Northline Distribution"
+                      data-name="Sofia Novak"
+                      data-country="Czech Republic"
+                      data-email="sofia@northline.example"
+                      data-phone="+420 7xx xxx xxx"
+                      data-product="Rash Guards"
+                      data-qty="1,200 pcs"
+                      data-msg="Full sublimation, four artworks, mixed size run XS-3XL. Need sample within three weeks."
+                      class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 3 -->
+                <tr data-inquiry-row data-status="quoted" class="border-b border-border transition-colors hover:bg-muted/50">
+                  <td class="p-4 align-middle font-mono text-xs text-muted-foreground">INQ-1040</td>
+                  <td class="p-4 align-middle">
+                    <span class="font-medium text-navy">Ronin Academy</span>
+                    <span class="block text-xs text-muted-foreground">Daniel Okafor</span>
+                  </td>
+                  <td class="hidden md:table-cell p-4 align-middle text-muted-foreground">United Kingdom</td>
+                  <td class="hidden sm:table-cell p-4 align-middle text-muted-foreground">BJJ Belts</td>
+                  <td class="hidden lg:table-cell p-4 align-middle text-muted-foreground">250 pcs</td>
+                  <td class="p-4 align-middle">
+                    <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Quoted</span>
+                  </td>
+                  <td class="p-4 align-middle text-right">
+                    <button
+                      type="button"
+                      data-view-inquiry
+                      data-id="INQ-1040"
+                      data-company="Ronin Academy"
+                      data-name="Daniel Okafor"
+                      data-country="United Kingdom"
+                      data-email="dan@roninacademy.example"
+                      data-phone="+44 7xxx xxxxxx"
+                      data-product="BJJ Belts"
+                      data-qty="250 pcs"
+                      data-msg="Full rank set for the academy with embroidered belt ends."
+                      class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 4 -->
+                <tr data-inquiry-row data-status="quoted" class="border-b border-border transition-colors hover:bg-muted/50">
+                  <td class="p-4 align-middle font-mono text-xs text-muted-foreground">INQ-1039</td>
+                  <td class="p-4 align-middle">
+                    <span class="font-medium text-navy">Kaido Fightwear</span>
+                    <span class="block text-xs text-muted-foreground">Aiko Tanaka</span>
+                  </td>
+                  <td class="hidden md:table-cell p-4 align-middle text-muted-foreground">Japan</td>
+                  <td class="hidden sm:table-cell p-4 align-middle text-muted-foreground">Grappling Shorts</td>
+                  <td class="hidden lg:table-cell p-4 align-middle text-muted-foreground">800 pcs</td>
+                  <td class="p-4 align-middle">
+                    <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Quoted</span>
+                  </td>
+                  <td class="p-4 align-middle text-right">
+                    <button
+                      type="button"
+                      data-view-inquiry
+                      data-id="INQ-1039"
+                      data-company="Kaido Fightwear"
+                      data-name="Aiko Tanaka"
+                      data-country="Japan"
+                      data-email="aiko@kaido.example"
+                      data-phone="+81 90 xxxx xxxx"
+                      data-product="Grappling Shorts"
+                      data-qty="800 pcs"
+                      data-msg="Four-way stretch, hook closure, three colourways. Packaging with our own hang tags."
+                      class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 5 -->
+                <tr data-inquiry-row data-status="closed" class="border-b border-border transition-colors hover:bg-muted/50">
+                  <td class="p-4 align-middle font-mono text-xs text-muted-foreground">INQ-1038</td>
+                  <td class="p-4 align-middle">
+                    <span class="font-medium text-navy">Southpaw Supply</span>
+                    <span class="block text-xs text-muted-foreground">Liam Carter</span>
+                  </td>
+                  <td class="hidden md:table-cell p-4 align-middle text-muted-foreground">Australia</td>
+                  <td class="hidden sm:table-cell p-4 align-middle text-muted-foreground">No-Gi Apparel</td>
+                  <td class="hidden lg:table-cell p-4 align-middle text-muted-foreground">450 pcs</td>
+                  <td class="p-4 align-middle">
+                    <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Closed</span>
+                  </td>
+                  <td class="p-4 align-middle text-right">
+                    <button
+                      type="button"
+                      data-view-inquiry
+                      data-id="INQ-1038"
+                      data-company="Southpaw Supply"
+                      data-name="Liam Carter"
+                      data-country="Australia"
+                      data-email="liam@southpaw.example"
+                      data-phone="+61 4xx xxx xxx"
+                      data-product="No-Gi Apparel"
+                      data-qty="450 pcs"
+                      data-msg="Training tees and spats, one colourway, screen printed logo."
+                      class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Empty State -->
+                <tr data-inquiry-empty style="display: none;">
+                  <td colspan="7" class="py-10 text-center text-sm text-muted-foreground">
+                    No inquiries match this filter.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Detail Modal Dialog -->
+        <div id="inquiry-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+          <div class="relative w-full max-w-lg rounded-lg border border-border bg-background p-6 shadow-lg">
+            <div class="flex items-center justify-between border-b border-border pb-3">
+              <h2 id="modal-title" class="font-display uppercase text-navy font-bold text-lg">Inquiry Detail</h2>
+              <button type="button" data-modal-close class="rounded-sm opacity-70 hover:opacity-100">
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            
+            <div class="space-y-4 pt-4 text-sm">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="eyebrow text-muted-foreground">Contact</p>
+                  <p id="modal-name" class="mt-1 break-words text-navy font-medium"></p>
+                </div>
+                <div>
+                  <p class="eyebrow text-muted-foreground">Country</p>
+                  <p id="modal-country" class="mt-1 break-words text-navy font-medium"></p>
+                </div>
+                <div>
+                  <p class="eyebrow text-muted-foreground">Email</p>
+                  <p id="modal-email" class="mt-1 break-words text-navy font-medium"></p>
+                </div>
+                <div>
+                  <p class="eyebrow text-muted-foreground">Phone</p>
+                  <p id="modal-phone" class="mt-1 break-words text-navy font-medium"></p>
+                </div>
+                <div>
+                  <p class="eyebrow text-muted-foreground">Product</p>
+                  <p id="modal-product" class="mt-1 break-words text-navy font-medium"></p>
+                </div>
+                <div>
+                  <p class="eyebrow text-muted-foreground">Quantity</p>
+                  <p id="modal-qty" class="mt-1 break-words text-navy font-medium"></p>
+                </div>
+              </div>
+              <div>
+                <p class="eyebrow text-muted-foreground">Message</p>
+                <p id="modal-msg" class="mt-2 leading-relaxed text-navy"></p>
+              </div>
+              <div class="flex gap-2 pt-4 border-t border-border">
+                <button type="button" class="rounded-md bg-navy px-4 py-2 text-sm font-medium text-navy-foreground hover:bg-navy/90 transition-colors">Mark as quoted</button>
+                <button type="button" data-modal-close class="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent transition-colors">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/admin.js"></script>
+</body>
+</html>
