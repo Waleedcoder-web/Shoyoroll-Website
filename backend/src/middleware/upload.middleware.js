@@ -1,27 +1,11 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
-const uploadDir = path.resolve(__dirname, '../../uploads');
-
-// Ensure upload directory exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Multer Disk Storage configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    // Sanitize extension and generate unique filename
-    const ext = path.extname(file.originalname).toLowerCase();
-    const cleanBase = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '_');
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${cleanBase}-${uniqueSuffix}${ext}`);
-  },
-});
+// Use memoryStorage for serverless platforms (Vercel) so files are safely kept in memory
+// and can be saved directly as Data URLs into PostgreSQL or /tmp
+const storage = multer.memoryStorage();
 
 // File filter (accept images only)
 const fileFilter = (req, file, cb) => {

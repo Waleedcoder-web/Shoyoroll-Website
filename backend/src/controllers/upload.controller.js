@@ -1,6 +1,21 @@
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const db = require('../config/db');
+
+// In local environment, write to uploads/ directory. In serverless/Vercel, write to /tmp or use Data URL.
+const isVercel = Boolean(process.env.VERCEL);
+const localUploadsDir = path.resolve(__dirname, '../../uploads');
+const tmpUploadsDir = path.join(os.tmpdir(), 'blueneedle_uploads');
+const activeUploadDir = isVercel ? tmpUploadsDir : localUploadsDir;
+
+try {
+  if (!fs.existsSync(activeUploadDir)) {
+    fs.mkdirSync(activeUploadDir, { recursive: true });
+  }
+} catch (e) {
+  // Ignore
+}
 
 /**
  * Handle multiple image uploads and save records to PostgreSQL
@@ -17,9 +32,28 @@ async function uploadMultipleImages(req, res, next) {
     const productId = req.body.product_id ? parseInt(req.body.product_id, 10) : null;
     const uploadedRecords = [];
 
-    // Save each uploaded file record to PostgreSQL uploads table
     for (const file of req.files) {
-      const fileUrl = `/uploads/${file.filename}`;
+      const ext = path.extname(file.originalname).toLowerCase() || '.jpg';
+      const cleanBase = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '_');
+      const filename = `${cleanBase}-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+      
+      // Store on disk (/tmp on Vercel, or uploads/ locally)
+      try {
+        const diskPath = path.join(activeUploadDir, filename);
+        fs.writeFileSync(diskPath, file.buffer);
+      } catch (err) {
+        console.warn('Could not write image to disk:', err.message);
+      }
+
+      // In serverless cloud (Vercel), convert to Data URL so it persists permanently in PostgreSQL
+      // and displays reliably across all serverless instances
+      let fileUrl;
+      if (isVercel || !fs.existsSync(localUploadsDir)) {
+        const base64Data = file.buffer.toString('base64');
+        fileUrl = `data:${file.mimetype};base64,${base64Data}`;
+      } else {
+        fileUrl = `/uploads/${filename}`;
+      }
 
       const insertSql = `
         INSERT INTO uploads (filename, original_name, mimetype, size, url, product_id)
@@ -28,7 +62,7 @@ async function uploadMultipleImages(req, res, next) {
       `;
 
       const values = [
-        file.filename,
+        filename,
         file.originalname,
         file.mimetype,
         file.size,
@@ -40,7 +74,7 @@ async function uploadMultipleImages(req, res, next) {
       uploadedRecords.push(result.rows[0]);
     }
 
-    // If product_id was specified, optionally update products.images array in PostgreSQL
+    // If product_id was specified, update products.images array in PostgreSQL
     if (productId) {
       const newUrls = uploadedRecords.map((r) => r.url);
       await db.query(
@@ -91,7 +125,7 @@ async function getAllUploads(req, res, next) {
 }
 
 /**
- * Delete an upload record from PostgreSQL and disk
+ * Delete an upload record from PostgreSQL
  */
 async function deleteUpload(req, res, next) {
   try {
@@ -107,11 +141,13 @@ async function deleteUpload(req, res, next) {
 
     const deletedRecord = result.rows[0];
 
-    // Remove file from disk
-    const filePath = path.resolve(__dirname, '../../uploads', deletedRecord.filename);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
+    // Attempt removing file from disk if local
+    try {
+      const filePath = path.join(activeUploadDir, deletedRecord.filename);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    } catch (e) {}
 
     res.json({
       success: true,

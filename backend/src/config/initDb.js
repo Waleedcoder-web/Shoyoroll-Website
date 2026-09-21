@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS products (
   colors JSONB DEFAULT '[]'::jsonb,
   sizes JSONB DEFAULT '[]'::jsonb,
   moq INTEGER DEFAULT 50,
-  image_url VARCHAR(500),
+  image_url TEXT,
   images JSONB DEFAULT '[]'::jsonb,
   preview_url VARCHAR(255),
   is_active BOOLEAN DEFAULT true,
@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS products (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Alter table in case products already existed
+-- Alter table columns in case they were previously VARCHAR(500)
+ALTER TABLE products ALTER COLUMN image_url TYPE TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]'::jsonb;
 
 -- Uploads table
@@ -61,10 +62,12 @@ CREATE TABLE IF NOT EXISTS uploads (
   original_name VARCHAR(255) NOT NULL,
   mimetype VARCHAR(100) NOT NULL,
   size INTEGER NOT NULL,
-  url VARCHAR(500) NOT NULL,
+  url TEXT NOT NULL,
   product_id INTEGER REFERENCES products(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE uploads ALTER COLUMN url TYPE TEXT;
 
 -- Inquiries table
 CREATE TABLE IF NOT EXISTS inquiries (
