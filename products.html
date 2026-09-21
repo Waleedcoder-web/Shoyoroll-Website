@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Products | BLUENEEDLE Admin</title>
+  <meta name="description" content="Manage the BJJ gear range shown on the website." />
+  <meta name="robots" content="noindex" />
+  
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="../css/styles.css" />
+  
+  <!-- Custom CSS for Delete Actions and Modal Dialog -->
+  <style>
+    .btn-delete-red {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+      color: #ffffff !important;
+      border: 1px solid #b91c1c !important;
+      border-radius: 6px !important;
+      padding: 6px 12px !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      box-shadow: 0 1px 3px rgba(220, 38, 38, 0.35) !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      text-decoration: none !important;
+    }
+    .btn-delete-red:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;
+      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.45) !important;
+      transform: translateY(-1px) !important;
+    }
+    .btn-delete-red:active {
+      transform: translateY(0) scale(0.98) !important;
+    }
+    .btn-delete-red svg {
+      width: 14px !important;
+      height: 14px !important;
+      stroke: #ffffff !important;
+      stroke-width: 2.2 !important;
+    }
+
+    /* Modal Backdrop */
+    .delete-modal-overlay {
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 9999 !important;
+      background: rgba(15, 23, 42, 0.75) !important;
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 16px !important;
+      animation: modalFadeIn 0.2s ease-out forwards !important;
+    }
+    .delete-modal-overlay.hidden {
+      display: none !important;
+    }
+
+    /* Modal Dialog Container */
+    .delete-modal-box {
+      width: 100% !important;
+      max-width: 440px !important;
+      background: #ffffff !important;
+      border-radius: 16px !important;
+      border: 1px solid #fee2e2 !important;
+      box-shadow: 0 25px 50px -12px rgba(220, 38, 38, 0.25), 0 0 0 1px rgba(220, 38, 38, 0.08) !important;
+      overflow: hidden !important;
+      animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+      color: #1e293b !important;
+      font-family: inherit !important;
+    }
+
+    .delete-modal-header {
+      padding: 24px 24px 16px 24px !important;
+      display: flex !important;
+      gap: 16px !important;
+      align-items: flex-start !important;
+    }
+
+    .delete-icon-wrap {
+      width: 48px !important;
+      height: 48px !important;
+      border-radius: 50% !important;
+      background-color: #fee2e2 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+      border: 2px solid #fecaca !important;
+    }
+    .delete-icon-wrap svg {
+      width: 26px !important;
+      height: 26px !important;
+      stroke: #dc2626 !important;
+      stroke-width: 2 !important;
+    }
+
+    .delete-modal-title {
+      font-size: 19px !important;
+      font-weight: 800 !important;
+      color: #991b1b !important;
+      margin: 0 0 8px 0 !important;
+      letter-spacing: -0.01em !important;
+    }
+
+    .delete-modal-desc {
+      font-size: 14px !important;
+      color: #475569 !important;
+      line-height: 1.5 !important;
+      margin: 0 !important;
+    }
+
+    .delete-highlight-name {
+      display: inline-block !important;
+      background-color: #fef2f2 !important;
+      color: #b91c1c !important;
+      padding: 2px 8px !important;
+      border-radius: 4px !important;
+      font-weight: 700 !important;
+      border: 1px solid #fecaca !important;
+      word-break: break-word !important;
+    }
+
+    .delete-warning-note {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      margin-top: 10px !important;
+      font-size: 12px !important;
+      color: #dc2626 !important;
+      font-weight: 600 !important;
+    }
+
+    .delete-modal-actions {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      gap: 10px !important;
+      padding: 16px 24px !important;
+      background-color: #f8fafc !important;
+      border-top: 1px solid #f1f5f9 !important;
+    }
+
+    .btn-modal-cancel {
+      padding: 9px 18px !important;
+      border-radius: 8px !important;
+      border: 1px solid #cbd5e1 !important;
+      background: #ffffff !important;
+      color: #334155 !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+    }
+    .btn-modal-cancel:hover {
+      background: #f1f5f9 !important;
+      color: #0f172a !important;
+      border-color: #94a3b8 !important;
+    }
+
+    .btn-modal-delete-confirm {
+      padding: 9px 20px !important;
+      border-radius: 8px !important;
+      border: 1px solid #dc2626 !important;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+      color: #ffffff !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.4) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      transition: all 0.15s ease !important;
+    }
+    .btn-modal-delete-confirm:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;
+      box-shadow: 0 4px 14px rgba(185, 28, 28, 0.5) !important;
+    }
+    .btn-modal-delete-confirm:active {
+      transform: scale(0.98) !important;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+
+  <!-- Auth Route Guard -->
+  <script src="../js/auth.js"></script>
+</head>
+<body class="bg-secondary text-foreground font-sans antialiased">
+  <div class="min-h-screen bg-secondary">
+    <!-- Desktop Sidebar -->
+    <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col bg-navy-deep px-4 py-6 lg:flex">
+      <a href="index.html" class="flex items-center gap-2.5 px-2">
+        <img src="../assets/logo.png" alt="" width="512" height="512" class="h-8 w-8 object-contain" />
+        <span class="font-display text-base font-extrabold tracking-tight text-navy-foreground">
+          BLUENEEDLE
+        </span>
+      </a>
+      <p class="mt-1 px-2 text-[11px] uppercase tracking-[0.18em] text-navy-foreground/40">Admin</p>
+      
+      <div class="mt-8 flex-1">
+        <nav class="flex flex-col gap-1">
+          <a href="index.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            Overview
+          </a>
+          <a href="inquiries.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            Inquiries
+          </a>
+          <a href="products.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium bg-electric text-electric-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            Products
+          </a>
+          <a href="settings.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Site Settings
+          </a>
+          <a href="ui-kit.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground transition-colors">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="14" y="3" rx="1"/><path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/></svg>
+            UI Kit
+          </a>
+        </nav>
+      </div>
+
+      <a
+        href="../index.html"
+        class="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm text-navy-foreground/60 transition-colors hover:text-navy-foreground"
+      >
+        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        View website
+      </a>
+    </aside>
+
+    <!-- Main Container -->
+    <div class="lg:pl-64">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+        <div class="flex items-center gap-4 px-5 py-4 lg:px-8">
+          <button
+            type="button"
+            aria-label="Menu"
+            data-admin-menu-toggle
+            class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border lg:hidden"
+          >
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+          <div class="min-w-0 flex-1">
+            <h1 class="truncate font-display text-lg font-bold text-navy">Products</h1>
+            <p class="truncate text-sm text-muted-foreground">The gear range presented to buyers</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button
+              type="button"
+              data-edit-product
+              data-p-name="BJJ Gi"
+              data-p-short="Traditional BJJ uniforms manufactured for training and competition requirements."
+              data-p-intro="Pearl weave and gold weave BJJ uniforms built to your specification."
+              data-p-materials="Pearl weave cotton 350-550 GSM&#10;Gold weave cotton&#10;Ripstop pants&#10;EVA foam collar"
+              class="inline-flex items-center justify-center rounded-md bg-navy px-4 py-2 text-sm font-medium text-navy-foreground hover:bg-navy/90 transition-colors"
+            >
+              Add product
+            </button>
+            <button type="button" data-action-logout class="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors cursor-pointer">
+              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <div data-admin-mobile-nav class="hidden border-t border-border bg-navy-deep px-4 py-3 lg:hidden">
+          <nav class="flex flex-col gap-1">
+            <a href="index.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Overview</a>
+            <a href="inquiries.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Inquiries</a>
+            <a href="products.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium bg-electric text-electric-foreground">Products</a>
+            <a href="settings.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">Site Settings</a>
+            <a href="ui-kit.html" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-navy-foreground/70 hover:bg-white/10 hover:text-navy-foreground">UI Kit</a>
+            <a href="../index.html" class="mt-2 flex items-center gap-2 border-t border-white/10 pt-2 text-sm text-navy-foreground/60">View website &rarr;</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="px-5 py-8 lg:px-8">
+        <div data-products-grid class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <!-- Product 1 -->
+          <article class="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            <img src="../assets/product-gi.jpg" alt="BJJ Gi" width="1024" height="1024" class="aspect-[16/10] w-full object-cover" />
+            <div class="p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="font-display text-base font-bold uppercase text-navy">BJJ Gi</h2>
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Live</span>
+              </div>
+              <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">Traditional BJJ uniforms manufactured for training and competition requirements.</p>
+              <div class="mt-5 flex gap-2">
+                <button
+                  type="button"
+                  data-edit-product
+                  data-p-name="BJJ Gi"
+                  data-p-short="Traditional BJJ uniforms manufactured for training and competition requirements."
+                  data-p-intro="Pearl weave and gold weave BJJ uniforms built to your specification — jacket weight, collar firmness, taping, and pant construction adjusted to your brand's fit block."
+                  data-p-materials="Pearl weave cotton 350-550 GSM&#10;Gold weave cotton&#10;Ripstop and cotton-drill pants&#10;EVA foam collar with cotton casing"
+                  class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                >
+                  Edit
+                </button>
+                <a href="../products/bjj-gi.html" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors">
+                  Preview
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 2 -->
+          <article class="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            <img src="../assets/product-belts.jpg" alt="BJJ Belts" width="1024" height="1024" class="aspect-[16/10] w-full object-cover" />
+            <div class="p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="font-display text-base font-bold uppercase text-navy">BJJ Belts</h2>
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Live</span>
+              </div>
+              <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">Durable BJJ belts available in different ranks, sizes, colors, and custom branding options.</p>
+              <div class="mt-5 flex gap-2">
+                <button
+                  type="button"
+                  data-edit-product
+                  data-p-name="BJJ Belts"
+                  data-p-short="Durable BJJ belts available in different ranks, sizes, colors, and custom branding options."
+                  data-p-intro="Rank belts built with firm multi-row stitching and a clean rank bar, produced in full colour ranges with your own labelling."
+                  data-p-materials="Cotton twill belt body&#10;Multi-layer inner core&#10;Cotton or leather rank bar patch"
+                  class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                >
+                  Edit
+                </button>
+                <a href="../products/bjj-belts.html" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors">
+                  Preview
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 3 -->
+          <article class="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            <img src="../assets/product-nogi.jpg" alt="No-Gi Apparel" width="1024" height="1024" class="aspect-[16/10] w-full object-cover" />
+            <div class="p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="font-display text-base font-bold uppercase text-navy">No-Gi Apparel</h2>
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Live</span>
+              </div>
+              <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">Performance-focused apparel for modern grappling and No-Gi training.</p>
+              <div class="mt-5 flex gap-2">
+                <button
+                  type="button"
+                  data-edit-product
+                  data-p-name="No-Gi Apparel"
+                  data-p-short="Performance-focused apparel for modern grappling and No-Gi training."
+                  data-p-intro="Training tees, spats and layering pieces made from performance knits, cut and finished for grappling movement."
+                  data-p-materials="Polyester-spandex performance knit&#10;Cotton-poly blends&#10;Moisture-managing jersey"
+                  class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                >
+                  Edit
+                </button>
+                <a href="../products/no-gi-apparel.html" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors">
+                  Preview
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 4 -->
+          <article class="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            <img src="../assets/product-rashguard.jpg" alt="Rash Guards" width="1024" height="1024" class="aspect-[16/10] w-full object-cover" />
+            <div class="p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="font-display text-base font-bold uppercase text-navy">Rash Guards</h2>
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Live</span>
+              </div>
+              <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">Custom-designed compression rash guards with professional printing and branding.</p>
+              <div class="mt-5 flex gap-2">
+                <button
+                  type="button"
+                  data-edit-product
+                  data-p-name="Rash Guards"
+                  data-p-short="Custom-designed compression rash guards with professional printing and branding."
+                  data-p-intro="Full sublimation compression rash guards with flatlock or overlock seams and artwork printed edge to edge."
+                  data-p-materials="Polyester-spandex 220-280 GSM&#10;Recycled poly options&#10;Silicone gripper hem"
+                  class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                >
+                  Edit
+                </button>
+                <a href="../products/rash-guards.html" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors">
+                  Preview
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 5 -->
+          <article class="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            <img src="../assets/product-shorts.jpg" alt="Grappling Shorts" width="1024" height="1024" class="aspect-[16/10] w-full object-cover" />
+            <div class="p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="font-display text-base font-bold uppercase text-navy">Grappling Shorts</h2>
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Live</span>
+              </div>
+              <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">Durable and flexible shorts designed for grappling and No-Gi training.</p>
+              <div class="mt-5 flex gap-2">
+                <button
+                  type="button"
+                  data-edit-product
+                  data-p-name="Grappling Shorts"
+                  data-p-short="Durable and flexible shorts designed for grappling and No-Gi training."
+                  data-p-intro="Fight and grappling shorts with reinforced stress points, split or slit legs, and a secure drawcord or hook closure."
+                  data-p-materials="4-way stretch polyester&#10;Micro polyester twill&#10;Stretch mesh panels"
+                  class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                >
+                  Edit
+                </button>
+                <a href="../products/grappling-shorts.html" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors">
+                  Preview
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 6 -->
+          <article class="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            <img src="../assets/custom-detail.jpg" alt="Custom BJJ Gear" width="1024" height="1024" class="aspect-[16/10] w-full object-cover" />
+            <div class="p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="font-display text-base font-bold uppercase text-navy">Custom BJJ Gear</h2>
+                <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">Live</span>
+              </div>
+              <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">Develop products according to your designs, specifications, branding, and requirements.</p>
+              <div class="mt-5 flex gap-2">
+                <button
+                  type="button"
+                  data-edit-product
+                  data-p-name="Custom BJJ Gear"
+                  data-p-short="Develop products according to your designs, specifications, branding, and requirements."
+                  data-p-intro="Bring a tech pack, a sketch, or a sample. We develop the product to your specification and produce it under your own brand."
+                  data-p-materials="Sourced to your specification&#10;Fabric options presented at sampling stage"
+                  class="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+                >
+                  Edit
+                </button>
+                <a href="../products/custom-bjj-gear.html" class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors">
+                  Preview
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Edit Product Sheet Drawer -->
+        <div id="product-sheet" class="hidden fixed inset-0 z-50 bg-black/80 flex justify-end">
+          <div class="relative h-full w-full max-w-lg overflow-y-auto bg-background p-6 shadow-lg border-l border-border">
+            <div class="flex items-center justify-between border-b border-border pb-4">
+              <h2 class="font-display uppercase text-navy font-bold text-lg">Edit product</h2>
+              <button type="button" data-sheet-close class="rounded-sm opacity-70 hover:opacity-100">
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            
+            <form class="mt-6 space-y-5" onsubmit="event.preventDefault(); document.querySelector('#product-sheet').classList.add('hidden');">
+              <div class="space-y-2">
+                <label for="p-name" class="text-sm font-medium text-navy">Product name</label>
+                <input id="p-name" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+              </div>
+              <div class="space-y-2">
+                <label for="p-short" class="text-sm font-medium text-navy">Short description</label>
+                <textarea id="p-short" rows="3" class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
+              </div>
+              <div class="space-y-2">
+                <label for="p-intro" class="text-sm font-medium text-navy">Detail page intro</label>
+                <textarea id="p-intro" rows="4" class="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
+              </div>
+              <div class="space-y-2">
+                <label for="p-materials" class="text-sm font-medium text-navy">Materials (one per line)</label>
+                <textarea id="p-materials" rows="3" class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-navy">Product Images (Upload Multiple)</label>
+                <div class="rounded-lg border-2 border-dashed border-input p-4 text-center hover:border-electric transition-colors bg-secondary/30 cursor-pointer" onclick="document.getElementById('p-images').click()">
+                  <svg class="mx-auto h-7 w-7 text-electric mb-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p class="text-xs text-navy font-semibold">Click to select multiple pictures</p>
+                  <p class="text-[11px] text-muted-foreground mt-0.5">JPEG, PNG, WEBP, GIF (up to 10 photos)</p>
+                  <input type="file" id="p-images" multiple accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" />
+                </div>
+                <div id="p-images-preview" class="grid grid-cols-4 gap-2 mt-2"></div>
+              </div>
+              <div class="flex items-center justify-between rounded-lg border border-border p-4">
+                <div>
+                  <p class="text-sm font-medium text-navy">Show on website</p>
+                  <p class="text-xs text-muted-foreground">Hide to remove it from the product grid.</p>
+                </div>
+                <input type="checkbox" checked class="h-5 w-5 accent-electric" />
+              </div>
+              <div class="flex items-center justify-between gap-2 pt-2">
+                <div class="flex gap-2">
+                  <button type="submit" class="rounded-md bg-navy px-4 py-2 text-sm font-medium text-navy-foreground hover:bg-navy/90 transition-colors">
+                    Save changes
+                  </button>
+                  <button type="button" data-sheet-close class="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent transition-colors">
+                    Cancel
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  id="btn-delete-product"
+                  class="btn-delete-red hidden"
+                  title="Permanently remove this product"
+                >
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <span>Delete Product</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Delete Product Confirmation Modal (Custom High-Visibility Dialog) -->
+        <div id="delete-modal" class="delete-modal-overlay hidden">
+          <div class="delete-modal-box">
+            <!-- Warning Header with Icon -->
+            <div class="delete-modal-header">
+              <div class="delete-icon-wrap">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <h3 class="delete-modal-title">Delete Product?</h3>
+                <p class="delete-modal-desc">
+                  Are you sure you want to permanently delete <span id="delete-modal-product-name" class="delete-highlight-name">this product</span>?
+                </p>
+                <div class="delete-warning-note">
+                  <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <span>This cannot be undone.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="delete-modal-actions">
+              <button
+                type="button"
+                id="btn-cancel-delete"
+                class="btn-modal-cancel"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                id="btn-confirm-delete"
+                class="btn-modal-delete-confirm"
+              >
+                <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span>Yes, Delete Product</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/admin.js"></script>
+</body>
+</html>
