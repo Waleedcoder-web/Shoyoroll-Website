@@ -1,43 +1,40 @@
 ﻿{
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "backend/api/index.js",
-      "use": "@vercel/node"
+      "source": "/api/(.*)",
+      "destination": "/api"
     },
     {
-      "src": "frontend/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/backend/api/index.js"
+      "source": "/uploads/(.*)",
+      "destination": "/api"
     },
     {
-      "src": "/uploads/(.*)",
-      "dest": "/backend/api/index.js"
+      "source": "/admin/login",
+      "destination": "/frontend/admin/login.html"
     },
     {
-      "src": "/admin/login",
-      "dest": "/frontend/admin/login.html"
+      "source": "/admin",
+      "destination": "/frontend/admin/index.html"
     },
     {
-      "src": "/admin/?$",
-      "dest": "/frontend/admin/index.html"
+      "source": "/admin/",
+      "destination": "/frontend/admin/index.html"
     },
     {
-      "src": "/admin/(.*)",
-      "dest": "/frontend/admin/"
+      "source": "/admin/:match*",
+      "destination": "/frontend/admin/:match*"
     },
     {
-      "src": "/products/(.*)",
-      "dest": "/frontend/products/"
+      "source": "/products/:match*",
+      "destination": "/frontend/products/:match*"
     },
     {
-      "src": "/(.*)",
-      "dest": "/frontend/"
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/:match*",
+      "destination": "/frontend/:match*"
     }
   ]
 }
