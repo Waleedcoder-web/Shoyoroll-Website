@@ -1,40 +1,17 @@
 ﻿{
+  "version": 2,
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api"
+      "destination": "/api/index.js"
     },
     {
       "source": "/uploads/(.*)",
-      "destination": "/api"
+      "destination": "/api/index.js"
     },
     {
-      "source": "/admin/login",
-      "destination": "/frontend/admin/login.html"
-    },
-    {
-      "source": "/admin",
-      "destination": "/frontend/admin/index.html"
-    },
-    {
-      "source": "/admin/",
-      "destination": "/frontend/admin/index.html"
-    },
-    {
-      "source": "/admin/:match*",
-      "destination": "/frontend/admin/:match*"
-    },
-    {
-      "source": "/products/:match*",
-      "destination": "/frontend/products/:match*"
-    },
-    {
-      "source": "/",
-      "destination": "/frontend/index.html"
-    },
-    {
-      "source": "/:match*",
-      "destination": "/frontend/:match*"
+      "source": "/(.*)",
+      "destination": "/frontend/"
     }
   ]
 }
