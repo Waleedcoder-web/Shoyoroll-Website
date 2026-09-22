@@ -509,6 +509,61 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedFiles = [];
   let existingImages = [];
 
+  // Helper: Resize & compress images on client before uploading to prevent Vercel 4.5MB payload error
+  async function compressImageFile(file, maxWidth = 1600, maxHeight = 1600, quality = 0.82) {
+    // If SVG or small file (< 300KB), return as is
+    if (file.type === 'image/svg+xml' || file.size < 300 * 1024) {
+      return file;
+    }
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            if (width > height) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob && blob.size < file.size) {
+                const compressed = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", {
+                  type: 'image/webp',
+                  lastModified: Date.now(),
+                });
+                resolve(compressed);
+              } else {
+                resolve(file);
+              }
+            },
+            'image/webp',
+            quality
+          );
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  }
+
   function openProductSheet(prod = null) {
     if (!productSheet) return;
     editingProductId = prod ? prod.id : null;
@@ -601,12 +656,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // File input change listener for multiple images
+  // File input change listener for multiple images (with auto-compression)
   const fileInputEl = document.querySelector('#p-images');
   if (fileInputEl) {
-    fileInputEl.addEventListener('change', (e) => {
-      const files = Array.from(e.target.files || []);
-      selectedFiles = selectedFiles.concat(files);
+    fileInputEl.addEventListener('change', async (e) => {
+      const rawFiles = Array.from(e.target.files || []);
+      for (const file of rawFiles) {
+        const compressed = await compressImageFile(file);
+        selectedFiles.push(compressed);
+      }
       renderImagePreviews();
     });
   }
@@ -648,23 +706,23 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           let uploadedUrls = [];
 
-          // 1. Upload newly selected files via Multer
+          // 1. Upload newly selected files (one by one to keep payloads tiny and fast)
           if (selectedFiles.length > 0) {
-            const formData = new FormData();
-            selectedFiles.forEach((file) => {
+            for (const file of selectedFiles) {
+              const formData = new FormData();
               formData.append('images', file);
-            });
 
-            const uploadRes = await authFetch(`${API_BASE}/upload/multiple`, {
-              method: 'POST',
-              body: formData,
-            });
+              const uploadRes = await authFetch(`${API_BASE}/upload/multiple`, {
+                method: 'POST',
+                body: formData,
+              });
 
-            const uploadData = await uploadRes.json();
-            if (uploadRes.ok && uploadData.success && uploadData.data) {
-              uploadedUrls = uploadData.data.map((r) => r.url);
-            } else {
-              throw new Error(uploadData.error?.message || 'Failed to upload images');
+              const uploadData = await uploadRes.json();
+              if (uploadRes.ok && uploadData.success && uploadData.data) {
+                uploadData.data.forEach((r) => uploadedUrls.push(r.url));
+              } else {
+                throw new Error(uploadData.error?.message || 'Failed to upload image');
+              }
             }
           }
 
