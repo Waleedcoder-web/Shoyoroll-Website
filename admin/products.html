@@ -484,17 +484,41 @@
                 <label for="p-name" class="text-sm font-medium text-navy">Product name</label>
                 <input id="p-name" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
               </div>
-              <div class="space-y-2">
-                <label for="p-short" class="text-sm font-medium text-navy">Short description</label>
-                <textarea id="p-short" rows="3" class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                  <label for="p-category" class="text-xs font-semibold uppercase text-navy">Category</label>
+                  <input id="p-category" placeholder="e.g. BJJ Gis, Rash Guards, Shorts" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+                </div>
+                <div class="space-y-1.5">
+                  <label for="p-moq" class="text-xs font-semibold uppercase text-navy">MOQ (Minimum Order Qty)</label>
+                  <input id="p-moq" type="number" placeholder="50" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                  <label for="p-weave" class="text-xs font-semibold uppercase text-navy">Fabric / Weave</label>
+                  <input id="p-weave" placeholder="e.g. Pearl Weave 450 GSM" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+                </div>
+                <div class="space-y-1.5">
+                  <label for="p-colors" class="text-xs font-semibold uppercase text-navy">Available Colors</label>
+                  <input id="p-colors" placeholder="e.g. White, Royal Blue, Black" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+                </div>
+              </div>
+              <div class="space-y-1.5">
+                <label for="p-sizes" class="text-xs font-semibold uppercase text-navy">Available Sizes</label>
+                <input id="p-sizes" placeholder="e.g. A0, A1, A2, A3, A4 or S, M, L, XL" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
               </div>
               <div class="space-y-2">
-                <label for="p-intro" class="text-sm font-medium text-navy">Detail page intro</label>
-                <textarea id="p-intro" rows="4" class="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
+                <label for="p-short" class="text-sm font-medium text-navy">Short overview description</label>
+                <textarea id="p-short" rows="2" placeholder="Brief summary shown on product cards" class="flex min-h-[50px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
               </div>
               <div class="space-y-2">
-                <label for="p-materials" class="text-sm font-medium text-navy">Materials (one per line)</label>
-                <textarea id="p-materials" rows="3" class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
+                <label for="p-intro" class="text-sm font-medium text-navy">Detailed description &amp; specifications</label>
+                <textarea id="p-intro" rows="3" placeholder="Full product description, fit block, stitching details..." class="flex min-h-[70px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
+              </div>
+              <div class="space-y-2">
+                <label for="p-materials" class="text-sm font-medium text-navy">Materials &amp; Highlights (one per line)</label>
+                <textarea id="p-materials" rows="3" placeholder="e.g.&#10;Pearl weave 450 GSM&#10;10oz ripstop pants&#10;Reinforced EVA foam collar" class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"></textarea>
               </div>
               <div class="space-y-2">
                 <label class="text-sm font-medium text-navy">Product Images (Upload Multiple)</label>

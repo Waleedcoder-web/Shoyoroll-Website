@@ -580,6 +580,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nameInput = productSheet.querySelector('#p-name');
     if (nameInput) nameInput.value = prod?.name || '';
+    const catInput = productSheet.querySelector('#p-category');
+    if (catInput) catInput.value = prod?.category || '';
+    const moqInput = productSheet.querySelector('#p-moq');
+    if (moqInput) moqInput.value = prod?.moq || '';
+    const weaveInput = productSheet.querySelector('#p-weave');
+    if (weaveInput) weaveInput.value = prod?.weave || '';
+    const colorsInput = productSheet.querySelector('#p-colors');
+    if (colorsInput) {
+      colorsInput.value = Array.isArray(prod?.colors) ? prod.colors.join(', ') : (prod?.colors || '');
+    }
+    const sizesInput = productSheet.querySelector('#p-sizes');
+    if (sizesInput) {
+      sizesInput.value = Array.isArray(prod?.sizes) ? prod.sizes.join(', ') : (prod?.sizes || '');
+    }
     const shortInput = productSheet.querySelector('#p-short');
     if (shortInput) shortInput.value = prod?.description || '';
     const introInput = productSheet.querySelector('#p-intro');
@@ -691,6 +705,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const name = sheetForm.querySelector('#p-name')?.value.trim();
+        const category = sheetForm.querySelector('#p-category')?.value.trim() || 'BJJ Gear';
+        const moq = parseInt(sheetForm.querySelector('#p-moq')?.value.trim() || '50', 10);
+        const weave = sheetForm.querySelector('#p-weave')?.value.trim() || '';
+        const colorsRaw = sheetForm.querySelector('#p-colors')?.value.trim() || '';
+        const colors = colorsRaw ? colorsRaw.split(',').map((s) => s.trim()).filter(Boolean) : [];
+        const sizesRaw = sheetForm.querySelector('#p-sizes')?.value.trim() || '';
+        const sizes = sizesRaw ? sizesRaw.split(',').map((s) => s.trim()).filter(Boolean) : [];
         const description = sheetForm.querySelector('#p-short')?.value.trim();
         const intro = sheetForm.querySelector('#p-intro')?.value.trim();
         const materials = sheetForm.querySelector('#p-materials')?.value.trim();
@@ -740,6 +761,11 @@ document.addEventListener('DOMContentLoaded', () => {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 name,
+                category,
+                moq,
+                weave,
+                colors,
+                sizes,
                 description,
                 intro,
                 materials,
@@ -754,7 +780,11 @@ document.addEventListener('DOMContentLoaded', () => {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 name,
-                category: 'BJJ Gear',
+                category,
+                moq,
+                weave,
+                colors,
+                sizes,
                 description,
                 intro,
                 materials,

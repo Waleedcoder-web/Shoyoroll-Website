@@ -184,34 +184,40 @@
       <!-- Specs Grid -->
       <section class="bg-secondary py-16 lg:py-24">
         <div class="mx-auto grid max-w-7xl gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8">
-          <!-- Materials -->
+          <!-- Materials & Specs -->
           <div class="rounded-lg border border-border bg-card p-6 shadow-xs">
             <h3 class="eyebrow text-electric">Materials &amp; Specs</h3>
             <ul id="materials-list" class="mt-4 space-y-2.5">
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Sourced to client specification</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Premium combat apparel quality</li>
               <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Reinforced stress areas</li>
             </ul>
+            <div id="fabric-wrap" class="mt-4 pt-3 border-t border-border/70 hidden">
+              <span class="text-xs font-semibold uppercase text-navy">Fabric / Weave:</span>
+              <p id="fabric-val" class="text-sm font-medium text-electric mt-1"></p>
+            </div>
           </div>
 
-          <!-- Customization -->
+          <!-- Colors & Sizes -->
           <div class="rounded-lg border border-border bg-card p-6 shadow-xs">
-            <h3 class="eyebrow text-electric">Customization</h3>
-            <ul class="mt-4 space-y-2.5">
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Custom Pantone &amp; fabric colors</li>
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Direct embroidery &amp; woven patches</li>
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>High-resolution sublimation printing</li>
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Custom neck taping &amp; size labels</li>
-            </ul>
+            <h3 class="eyebrow text-electric">Colors &amp; Sizing</h3>
+            <div id="colors-section" class="mt-4">
+              <span class="text-xs font-semibold uppercase text-navy">Available Colors:</span>
+              <div id="colors-list" class="mt-2 flex flex-wrap gap-1.5"></div>
+            </div>
+            <div id="sizes-section" class="mt-5 pt-3 border-t border-border/70">
+              <span class="text-xs font-semibold uppercase text-navy">Available Sizes:</span>
+              <div id="sizes-list" class="mt-2 flex flex-wrap gap-1.5"></div>
+            </div>
           </div>
 
-          <!-- Production & Sampling -->
+          <!-- Customization & Production -->
           <div class="rounded-lg border border-border bg-card p-6 shadow-xs">
-            <h3 class="eyebrow text-electric">Production &amp; Export</h3>
+            <h3 class="eyebrow text-electric">Customization &amp; Export</h3>
             <ul class="mt-4 space-y-2.5">
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Custom Pantone &amp; academy brand colors</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Embroidery, woven patches &amp; sublimation</li>
               <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Pre-production physical sample approval</li>
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Strict 100% inline quality control</li>
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Worldwide air &amp; sea door-to-door delivery</li>
-              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Direct manufacturer pricing from Sialkot</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Direct manufacturer export from Sialkot</li>
             </ul>
           </div>
         </div>
@@ -329,6 +335,44 @@
                 <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>${m.trim()}</li>
               `).join('');
             }
+          }
+
+          // Fabric / Weave
+          if (p.weave) {
+            const fabricWrap = document.getElementById('fabric-wrap');
+            const fabricVal = document.getElementById('fabric-val');
+            if (fabricWrap && fabricVal) {
+              fabricVal.textContent = p.weave;
+              fabricWrap.classList.remove('hidden');
+            }
+          }
+
+          // Colors
+          const colorsList = document.getElementById('colors-list');
+          if (colorsList) {
+            const cols = Array.isArray(p.colors) ? p.colors : (p.colors ? [p.colors] : ['Custom colors available']);
+            colorsList.innerHTML = cols.map(c => `
+              <span class="inline-flex items-center rounded-md border border-border bg-card px-2.5 py-1 text-xs font-semibold text-navy shadow-xs">
+                ${c.trim()}
+              </span>
+            `).join('');
+          }
+
+          // Sizes
+          const sizesList = document.getElementById('sizes-list');
+          if (sizesList) {
+            const szs = Array.isArray(p.sizes) ? p.sizes : (p.sizes ? [p.sizes] : ['A0 - A5', 'Custom size blocks']);
+            sizesList.innerHTML = szs.map(s => `
+              <span class="inline-flex items-center rounded-md bg-secondary px-2.5 py-1 text-xs font-semibold text-foreground">
+                ${s.trim()}
+              </span>
+            `).join('');
+          }
+
+          // Prefill inquiry form message with product name
+          const msgArea = document.querySelector('textarea[name="message"]');
+          if (msgArea) {
+            msgArea.value = `Hello BLUENEEDLE team, I am interested in manufacturing ${p.name}. Please send pricing, sample timeline, and production requirements.`;
           }
         }
       } catch (err) {
