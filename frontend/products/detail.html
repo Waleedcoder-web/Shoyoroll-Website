@@ -14,21 +14,132 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
   
   <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
   <style>
-    .gallery-thumb {
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.2s ease;
+    /* Full image display preserving aspect ratio */
+    .slider-main-viewport {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      max-height: 70vh;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .gallery-thumb.active {
+    @media (max-width: 640px) {
+      .slider-main-viewport {
+        height: 350px;
+      }
+    }
+    .slider-main-img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+      transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+    }
+
+    /* Left & Right Navigation Arrows */
+    .slider-arrow-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      background: rgba(15, 23, 42, 0.75);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+    }
+    .slider-arrow-btn:hover {
+      background: #0077b6;
+      transform: translateY(-50%) scale(1.08);
+    }
+    .slider-arrow-btn:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    .slider-arrow-prev {
+      left: 12px;
+    }
+    .slider-arrow-next {
+      right: 12px;
+    }
+    .slider-arrow-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2.5;
+    }
+
+    /* Counter indicator badge */
+    .slider-counter-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 10;
+    }
+
+    /* Horizontal Thumbnail Strip */
+    .thumbs-horizontal-track {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 6px 2px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .thumbs-horizontal-track::-webkit-scrollbar {
+      height: 5px;
+    }
+    .thumbs-horizontal-track::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .gallery-thumb-item {
+      flex: 0 0 74px;
+      height: 74px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      background: #f1f5f9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      opacity: 0.65;
+    }
+    .gallery-thumb-item.active {
       border-color: #0077b6;
       opacity: 1;
+      box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.25);
     }
-    .gallery-thumb:not(.active) {
-      opacity: 0.7;
-    }
-    .gallery-thumb:hover {
+    .gallery-thumb-item:hover {
       opacity: 1;
+    }
+    .gallery-thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   </style>
 </head>
@@ -116,20 +227,51 @@
     <main class="pt-18">
       <!-- Product Hero -->
       <section class="mx-auto grid max-w-7xl gap-12 px-5 py-16 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-24">
-        <!-- Image & Gallery Column -->
+        <!-- Image & Gallery Column with Full Image Contain & Arrows -->
         <div class="reveal">
-          <div class="overflow-hidden rounded-xl bg-secondary aspect-square border border-border">
+          <div class="slider-main-viewport">
+            <!-- Left Arrow Button -->
+            <button
+              type="button"
+              id="slider-btn-prev"
+              class="slider-arrow-btn slider-arrow-prev hidden"
+              aria-label="Previous photo"
+              title="Previous photo"
+            >
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <!-- Main Full Image (Never cropped) -->
             <img
               id="main-product-img"
               src="../assets/product-gi.jpg"
               alt="Product photo"
-              width="1024"
-              height="1024"
-              class="h-full w-full object-cover transition-all duration-300"
+              class="slider-main-img"
             />
+
+            <!-- Right Arrow Button -->
+            <button
+              type="button"
+              id="slider-btn-next"
+              class="slider-arrow-btn slider-arrow-next hidden"
+              aria-label="Next photo"
+              title="Next photo"
+            >
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <!-- Counter Badge (e.g. 1 / 4) -->
+            <div id="slider-counter" class="slider-counter-badge hidden">
+              1 / 1
+            </div>
           </div>
-          <!-- Multiple Images Thumbnails -->
-          <div id="gallery-thumbs-row" class="mt-4 flex flex-wrap gap-2.5"></div>
+
+          <!-- Multiple Images Horizontal Thumbnail Strip -->
+          <div id="gallery-thumbs-row" class="thumbs-horizontal-track mt-3"></div>
         </div>
 
         <!-- Info Column -->
@@ -310,20 +452,80 @@
             });
           }
 
+          // Multiple Images Slider & Gallery Management
           const mainImg = document.getElementById('main-product-img');
           const thumbsRow = document.getElementById('gallery-thumbs-row');
+          const prevBtn = document.getElementById('slider-btn-prev');
+          const nextBtn = document.getElementById('slider-btn-next');
+          const counterBadge = document.getElementById('slider-counter');
+
+          let currentImageIndex = 0;
+
+          function updateSlider(index) {
+            if (allImgs.length === 0) return;
+            currentImageIndex = (index + allImgs.length) % allImgs.length;
+            
+            // Smooth transition
+            mainImg.style.opacity = '0';
+            setTimeout(() => {
+              mainImg.src = allImgs[currentImageIndex];
+              mainImg.style.opacity = '1';
+            }, 100);
+
+            // Update counter badge
+            if (counterBadge) {
+              counterBadge.textContent = `${currentImageIndex + 1} / ${allImgs.length}`;
+            }
+
+            // Update active thumbnail state & scroll into view
+            const allThumbEls = thumbsRow.querySelectorAll('.gallery-thumb-item');
+            allThumbEls.forEach((thumb, i) => {
+              if (i === currentImageIndex) {
+                thumb.classList.add('active');
+                thumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+              } else {
+                thumb.classList.remove('active');
+              }
+            });
+          }
 
           if (allImgs.length > 0) {
             mainImg.src = allImgs[0];
             mainImg.alt = p.name;
 
             if (allImgs.length > 1) {
+              // Show navigation arrows & counter
+              if (prevBtn) {
+                prevBtn.classList.remove('hidden');
+                prevBtn.onclick = () => updateSlider(currentImageIndex - 1);
+              }
+              if (nextBtn) {
+                nextBtn.classList.remove('hidden');
+                nextBtn.onclick = () => updateSlider(currentImageIndex + 1);
+              }
+              if (counterBadge) {
+                counterBadge.classList.remove('hidden');
+                counterBadge.textContent = `1 / ${allImgs.length}`;
+              }
+
+              // Render horizontal thumbnail items
               thumbsRow.innerHTML = allImgs.map((src, i) => `
-                <div class="gallery-thumb ${i === 0 ? 'active' : ''} h-16 w-16 overflow-hidden rounded-md border bg-secondary" onclick="switchMainImage('${src}', this)">
-                  <img src="${src}" class="h-full w-full object-cover" />
+                <div class="gallery-thumb-item ${i === 0 ? 'active' : ''}" onclick="window.selectSlide(${i})">
+                  <img src="${src}" alt="Angle ${i + 1}" loading="lazy" />
                 </div>
               `).join('');
+
+              // Keyboard navigation support (Arrow Left & Arrow Right)
+              document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') updateSlider(currentImageIndex - 1);
+                if (e.key === 'ArrowRight') updateSlider(currentImageIndex + 1);
+              });
+            } else {
+              thumbsRow.classList.add('hidden');
             }
+
+            // Expose global slide selector for onclick
+            window.selectSlide = (i) => updateSlider(i);
           }
 
           // Materials list
