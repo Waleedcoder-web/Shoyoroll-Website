@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title id="page-title">Product Details | BLUENEEDLE</title>
+  <meta id="page-desc" name="description" content="Custom BJJ gear manufactured for training and competition requirements." />
+  
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .gallery-thumb {
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .gallery-thumb.active {
+      border-color: #0077b6;
+      opacity: 1;
+    }
+    .gallery-thumb:not(.active) {
+      opacity: 0.7;
+    }
+    .gallery-thumb:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground font-sans antialiased">
+  <div class="min-h-screen bg-background">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border/80 transition-all duration-300">
+      <div class="mx-auto flex h-18 max-w-7xl items-center justify-between gap-6 px-5 py-4 lg:px-8">
+        <a href="../index.html#top" class="flex items-center gap-2.5">
+          <img src="../assets/logo.png" alt="BLUENEEDLE" width="512" height="512" class="h-8 w-8 object-contain" />
+          <span class="font-display text-lg font-extrabold tracking-tight text-navy">
+            BLUE<span class="text-electric">NEEDLE</span>
+          </span>
+        </a>
+
+        <nav class="hidden items-center gap-8 lg:flex">
+          <a href="../index.html#top" class="text-sm font-medium text-muted-foreground transition-colors hover:text-navy">Home</a>
+          <a href="../index.html#about" class="text-sm font-medium text-muted-foreground transition-colors hover:text-navy">About Us</a>
+          <a href="../index.html#products" class="text-sm font-medium text-muted-foreground transition-colors hover:text-navy">Products</a>
+          <a href="../index.html#manufacturing" class="text-sm font-medium text-muted-foreground transition-colors hover:text-navy">Manufacturing</a>
+          <a href="../index.html#customization" class="text-sm font-medium text-muted-foreground transition-colors hover:text-navy">Customization</a>
+          <a href="../index.html#contact" class="text-sm font-medium text-muted-foreground transition-colors hover:text-navy">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-2.5">
+          <a
+            href="https://wa.me/923069235005"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="header-social-btn whatsapp"
+            title="Chat on WhatsApp (03069235005)"
+          >
+            <svg viewBox="0 0 24 24">
+              <path d="M17.53 14.37c-.28-.14-1.67-.82-1.93-.92-.26-.09-.45-.14-.64.14-.19.28-.74.92-.91 1.11-.17.19-.34.21-.62.07-.28-.14-1.21-.45-2.31-1.42-.85-.76-1.43-1.7-1.6-1.99-.17-.28-.02-.44.13-.58.13-.13.28-.34.43-.5.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.5-.08-.14-.65-1.56-.89-2.13-.23-.56-.47-.48-.65-.49l-.55-.01c-.19 0-.5.07-.77.36-.26.29-1.01.98-1.01 2.4 0 1.41 1.03 2.78 1.17 2.97.15.19 2.03 3.09 4.91 4.34.69.3 1.22.47 1.64.6.69.22 1.31.19 1.81.12.55-.08 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.34z"/>
+            </svg>
+          </a>
+          <a
+            href="https://www.instagram.com/blueneedle3/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="header-social-btn instagram"
+            title="Follow on Instagram (@blueneedle3)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a
+            href="#quote"
+            class="hidden rounded-md bg-navy px-4 py-2.5 text-sm font-semibold text-navy-foreground transition-all hover:bg-electric sm:inline-flex"
+          >
+            Request a Quote
+          </a>
+          <button
+            type="button"
+            aria-label="Menu"
+            data-menu-toggle
+            class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border lg:hidden"
+          >
+            <span class="relative block h-3.5 w-5">
+              <span data-menu-line class="absolute left-0 top-0 h-0.5 w-5 bg-navy transition-all"></span>
+              <span data-menu-line class="absolute left-0 top-1.5 h-0.5 w-5 bg-navy transition-all"></span>
+              <span data-menu-line class="absolute left-0 top-3 h-0.5 w-5 bg-navy transition-all"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div data-mobile-menu class="hidden border-t border-border bg-background lg:hidden">
+        <nav class="mx-auto flex max-w-7xl flex-col px-5 py-3">
+          <a href="../index.html#top" class="border-b border-border py-3.5 text-sm font-medium text-navy last:border-0">Home</a>
+          <a href="../index.html#about" class="border-b border-border py-3.5 text-sm font-medium text-navy last:border-0">About Us</a>
+          <a href="../index.html#products" class="border-b border-border py-3.5 text-sm font-medium text-navy last:border-0">Products</a>
+          <a href="../index.html#manufacturing" class="border-b border-border py-3.5 text-sm font-medium text-navy last:border-0">Manufacturing</a>
+          <a href="../index.html#customization" class="border-b border-border py-3.5 text-sm font-medium text-navy last:border-0">Customization</a>
+          <a href="../index.html#contact" class="border-b border-border py-3.5 text-sm font-medium text-navy last:border-0">Contact</a>
+          <a href="#quote" class="mt-3 rounded-md bg-navy px-5 py-3 text-center text-sm font-semibold text-navy-foreground">Request a Quote</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="pt-18">
+      <!-- Product Hero -->
+      <section class="mx-auto grid max-w-7xl gap-12 px-5 py-16 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-24">
+        <!-- Image & Gallery Column -->
+        <div class="reveal">
+          <div class="overflow-hidden rounded-xl bg-secondary aspect-square border border-border">
+            <img
+              id="main-product-img"
+              src="../assets/product-gi.jpg"
+              alt="Product photo"
+              width="1024"
+              height="1024"
+              class="h-full w-full object-cover transition-all duration-300"
+            />
+          </div>
+          <!-- Multiple Images Thumbnails -->
+          <div id="gallery-thumbs-row" class="mt-4 flex flex-wrap gap-2.5"></div>
+        </div>
+
+        <!-- Info Column -->
+        <div class="reveal flex flex-col justify-center" style="transition-delay: 80ms;">
+          <a href="../index.html#products" class="eyebrow text-electric inline-flex items-center gap-1.5 hover:underline">
+            &larr; All Products
+          </a>
+          <div class="mt-4 flex items-center gap-3">
+            <h1 id="product-name" class="text-3xl font-extrabold uppercase text-navy lg:text-4xl">
+              Loading Product...
+            </h1>
+            <span id="product-category" class="rounded-md bg-electric/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-electric">
+              BJJ Gear
+            </span>
+          </div>
+
+          <p id="product-intro" class="mt-5 text-base leading-relaxed text-muted-foreground">
+            Custom manufactured to your specifications and branding requirements.
+          </p>
+          <p id="product-desc" class="mt-4 text-sm leading-relaxed text-muted-foreground">
+            Bulk production for international combat sports brands, academies, and distributors.
+          </p>
+
+          <div class="mt-6 flex items-center gap-4 text-xs font-semibold text-navy">
+            <div class="flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+              <span>Bulk Manufacturing Available</span>
+            </div>
+            <div id="product-moq" class="text-muted-foreground">
+              MOQ: 50 pcs
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#quote"
+              class="inline-flex rounded-md bg-navy px-7 py-3.5 font-display text-sm font-bold tracking-wide text-navy-foreground transition-colors hover:bg-electric"
+            >
+              Request a Quote
+            </a>
+            <a
+              href="https://wa.me/923069235005"
+              target="_blank"
+              class="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-5 py-3.5 font-display text-sm font-bold text-white transition-opacity hover:opacity-90"
+            >
+              WhatsApp Inquiry
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Specs Grid -->
+      <section class="bg-secondary py-16 lg:py-24">
+        <div class="mx-auto grid max-w-7xl gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8">
+          <!-- Materials -->
+          <div class="rounded-lg border border-border bg-card p-6 shadow-xs">
+            <h3 class="eyebrow text-electric">Materials &amp; Specs</h3>
+            <ul id="materials-list" class="mt-4 space-y-2.5">
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Sourced to client specification</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Reinforced stress areas</li>
+            </ul>
+          </div>
+
+          <!-- Customization -->
+          <div class="rounded-lg border border-border bg-card p-6 shadow-xs">
+            <h3 class="eyebrow text-electric">Customization</h3>
+            <ul class="mt-4 space-y-2.5">
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Custom Pantone &amp; fabric colors</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Direct embroidery &amp; woven patches</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>High-resolution sublimation printing</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Custom neck taping &amp; size labels</li>
+            </ul>
+          </div>
+
+          <!-- Production & Sampling -->
+          <div class="rounded-lg border border-border bg-card p-6 shadow-xs">
+            <h3 class="eyebrow text-electric">Production &amp; Export</h3>
+            <ul class="mt-4 space-y-2.5">
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Pre-production physical sample approval</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Strict 100% inline quality control</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Worldwide air &amp; sea door-to-door delivery</li>
+              <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>Direct manufacturer pricing from Sialkot</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUOTE FORM SECTION -->
+      <section id="quote" class="mx-auto max-w-3xl px-5 py-20 lg:px-8">
+        <div class="reveal text-center">
+          <p class="eyebrow text-electric">Inquire Now</p>
+          <h2 class="mt-3 text-3xl font-extrabold uppercase text-navy">Request a Production Quote</h2>
+          <p class="mt-3 text-sm text-muted-foreground">Send us your quantity, colors, and branding requirements for this product.</p>
+        </div>
+
+        <form id="product-inquiry-form" class="mt-10 space-y-6 rounded-xl border border-border bg-card p-8 shadow-card">
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div>
+              <label class="text-xs font-semibold uppercase text-navy">Your Name *</label>
+              <input type="text" name="name" required class="mt-1.5 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm" placeholder="Full Name" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-navy">Email *</label>
+              <input type="email" name="email" required class="mt-1.5 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm" placeholder="name@brand.com" />
+            </div>
+          </div>
+
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div>
+              <label class="text-xs font-semibold uppercase text-navy">Company / Academy</label>
+              <input type="text" name="company" class="mt-1.5 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm" placeholder="Brand or Academy" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-navy">Estimated Quantity</label>
+              <input type="number" name="quantity" min="20" class="mt-1.5 flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm" placeholder="e.g. 100" />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold uppercase text-navy">Specifications &amp; Customization Details *</label>
+            <textarea name="message" rows="4" required class="mt-1.5 flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm" placeholder="Include fabric preference, weave, GSM, sizes, artwork details, or target delivery date..."></textarea>
+          </div>
+
+          <button type="submit" class="w-full rounded-md bg-navy py-3.5 font-display text-sm font-bold uppercase tracking-wider text-navy-foreground transition-colors hover:bg-electric">
+            Submit Inquiry
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-border bg-card py-12">
+      <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-5 sm:flex-row lg:px-8">
+        <p class="text-xs text-muted-foreground">&copy; 2026 BLUENEEDLE. Premium BJJ Gear Manufacturing.</p>
+        <div class="flex items-center gap-6">
+          <a href="../index.html#top" class="text-xs text-muted-foreground hover:text-navy">Home</a>
+          <a href="../index.html#products" class="text-xs text-muted-foreground hover:text-navy">Products</a>
+          <a href="../index.html#contact" class="text-xs text-muted-foreground hover:text-navy">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+
+      if (!productId) return;
+
+      try {
+        const res = await fetch(`/api/products/${productId}`);
+        const result = await res.json();
+
+        if (res.ok && result.success && result.data) {
+          const p = result.data;
+          
+          document.title = `${p.name} | BLUENEEDLE`;
+          document.getElementById('product-name').textContent = p.name;
+          document.getElementById('product-category').textContent = p.category || 'BJJ Gear';
+          if (p.intro) document.getElementById('product-intro').textContent = p.intro;
+          if (p.description) document.getElementById('product-desc').textContent = p.description;
+          if (p.moq) document.getElementById('product-moq').textContent = `MOQ: ${p.moq} pcs`;
+
+          // Images
+          const allImgs = [];
+          if (p.image_url) allImgs.push(p.image_url);
+          if (p.images && Array.isArray(p.images)) {
+            p.images.forEach(img => {
+              if (img && !allImgs.includes(img)) allImgs.push(img);
+            });
+          }
+
+          const mainImg = document.getElementById('main-product-img');
+          const thumbsRow = document.getElementById('gallery-thumbs-row');
+
+          if (allImgs.length > 0) {
+            mainImg.src = allImgs[0];
+            mainImg.alt = p.name;
+
+            if (allImgs.length > 1) {
+              thumbsRow.innerHTML = allImgs.map((src, i) => `
+                <div class="gallery-thumb ${i === 0 ? 'active' : ''} h-16 w-16 overflow-hidden rounded-md border bg-secondary" onclick="switchMainImage('${src}', this)">
+                  <img src="${src}" class="h-full w-full object-cover" />
+                </div>
+              `).join('');
+            }
+          }
+
+          // Materials list
+          if (p.materials) {
+            const matList = document.getElementById('materials-list');
+            const items = p.materials.split('\n').filter(Boolean);
+            if (items.length > 0) {
+              matList.innerHTML = items.map(m => `
+                <li class="flex gap-3 text-sm text-muted-foreground"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric"></span>${m.trim()}</li>
+              `).join('');
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error loading product details:', err);
+      }
+    });
+
+    function switchMainImage(src, el) {
+      document.getElementById('main-product-img').src = src;
+      document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>

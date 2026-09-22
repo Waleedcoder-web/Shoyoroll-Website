@@ -176,12 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (imgSrc.startsWith('../assets/')) imgSrc = '/' + imgSrc.replace('../', '');
         if (imgSrc.startsWith('assets/')) imgSrc = '/' + imgSrc;
 
-        const detailLink = p.preview_url || '#contact';
+        const detailLink = p.preview_url ? (p.preview_url.startsWith('../') ? '/' + p.preview_url.replace('../', '') : p.preview_url) : `/products/detail.html?id=${p.id}`;
 
         return `
           <div class="reveal is-visible" style="transition-delay: ${(idx % 3) * 60}ms;">
             <article class="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-              <div class="overflow-hidden bg-secondary aspect-[4/3] w-full">
+              <a href="${detailLink}" class="block overflow-hidden bg-secondary aspect-[4/3] w-full cursor-pointer">
                 <img
                   src="${imgSrc}"
                   alt="${p.name}"
@@ -191,10 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
                   class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   onerror="this.src='/assets/product-gi.jpg'"
                 />
-              </div>
+              </a>
               <div class="flex flex-1 flex-col p-6">
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <h3 class="font-display text-lg font-bold uppercase text-navy">${p.name}</h3>
+                  <a href="${detailLink}" class="font-display text-lg font-bold uppercase text-navy hover:text-electric transition-colors">
+                    ${p.name}
+                  </a>
                   <span class="text-[11px] font-semibold uppercase tracking-wider text-electric bg-electric/10 px-2 py-0.5 rounded">
                     ${p.category || 'BJJ Gear'}
                   </span>
@@ -204,11 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </p>
                 <div class="mt-6 flex items-center justify-between gap-2 border-t border-border pt-4">
                   <a
-                    href="#contact"
-                    onclick="const sel = document.querySelector('select[name=\\'product\\']'); if(sel){ sel.value = '${p.name}'; }"
+                    href="${detailLink}"
                     class="inline-flex font-display text-xs font-bold uppercase tracking-wider text-electric transition-colors hover:text-navy"
                   >
-                    Request Quote &rarr;
+                    View Details &rarr;
                   </a>
                   ${p.moq ? `<span class="text-xs text-muted-foreground">MOQ: ${p.moq} pcs</span>` : ''}
                 </div>

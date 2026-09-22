@@ -354,16 +354,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (imgSrc.startsWith('../assets/')) imgSrc = '/' + imgSrc.replace('../', '');
         if (imgSrc.startsWith('assets/')) imgSrc = '/' + imgSrc;
 
-        const previewUrl = p.preview_url || `../products/${p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.html`;
+        const previewUrl = p.preview_url ? p.preview_url : `/products/detail.html?id=${p.id}`;
 
         return `
           <article class="overflow-hidden rounded-xl border border-border bg-card shadow-card transition-all hover:shadow-lift">
-            <div class="aspect-[16/10] w-full overflow-hidden bg-secondary">
-              <img src="${imgSrc}" alt="${escapeHtml(p.name)}" class="w-full h-full object-cover" onerror="this.src='/assets/product-gi.jpg'" />
-            </div>
+            <a href="${previewUrl}" target="_blank" class="block aspect-[16/10] w-full overflow-hidden bg-secondary cursor-pointer" title="View product detail page">
+              <img src="${imgSrc}" alt="${escapeHtml(p.name)}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='/assets/product-gi.jpg'" />
+            </a>
             <div class="p-5">
               <div class="flex items-center justify-between gap-3">
-                <h2 class="font-display text-base font-bold uppercase text-navy">${escapeHtml(p.name)}</h2>
+                <a href="${previewUrl}" target="_blank" class="font-display text-base font-bold uppercase text-navy hover:text-electric transition-colors">
+                  ${escapeHtml(p.name)}
+                </a>
                 <span class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold ${
                   p.is_active ? 'bg-secondary text-secondary-foreground' : 'bg-muted text-muted-foreground'
                 }">
@@ -380,8 +382,8 @@ document.addEventListener('DOMContentLoaded', () => {
                   >
                     Edit
                   </button>
-                  <a href="${previewUrl}" class="inline-flex items-center justify-center rounded-md px-2.5 py-1.5 text-xs font-medium text-foreground/70 hover:text-foreground hover:bg-accent transition-colors">
-                    Preview
+                  <a href="${previewUrl}" target="_blank" class="inline-flex items-center justify-center rounded-md px-2.5 py-1.5 text-xs font-medium text-electric hover:bg-electric/10 transition-colors">
+                    Preview &rarr;
                   </a>
                 </div>
                 <button
