@@ -2,40 +2,107 @@ const nodemailer = require('nodemailer');
 
 /**
  * Creates and returns a Nodemailer transporter based on environment configuration.
- * Supports Gmail, custom SMTP servers (Hostinger, cPanel, SendGrid, Brevo, AWS SES, etc.)
+ * Optimized for Gmail and custom SMTP servers, with robust timeout and SSL settings
+ * compatible with serverless environments (Vercel, AWS Lambda).
  */
 function getTransporter() {
-  const user = process.env.EMAIL_USER || process.env.SMTP_USER;
-  const pass = process.env.EMAIL_PASS || process.env.SMTP_PASS;
-  const host = process.env.SMTP_HOST;
-  const port = parseInt(process.env.SMTP_PORT || '587', 10);
-  const service = process.env.EMAIL_SERVICE;
+  const user = (process.env.EMAIL_USER || process.env.SMTP_USER || '').trim();
+  const rawPass = (process.env.EMAIL_PASS || process.env.SMTP_PASS || '').trim();
+  // Automatically strip spaces from Google App Password (e.g. "abcd efgh ijkl mnop" -> "abcdefghijklmnop")
+  const pass = rawPass.replace(/\s+/g, '');
+  const host = (process.env.SMTP_HOST || '').trim();
+  const port = parseInt(process.env.SMTP_PORT || '465', 10);
+  const service = (process.env.EMAIL_SERVICE || '').trim().toLowerCase();
 
   if (!user || !pass) {
     return null;
   }
 
-  // Gmail direct service configuration
-  if (service?.toLowerCase() === 'gmail' || host?.includes('gmail')) {
+  // Gmail configuration: Port 465 with SSL is the most reliable in serverless environments
+  const isGmail =
+    service === 'gmail' ||
+    host.includes('gmail') ||
+    user.toLowerCase().endsWith('@gmail.com') ||
+    (!host && !service);
+
+  if (isGmail) {
     return nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // SSL
       auth: {
         user,
-        pass, // Gmail 16-character App Password
+        pass,
       },
+      connectionTimeout: 15000,
+      greetingTimeout: 15000,
+      socketTimeout: 20000,
     });
   }
 
-  // Standard SMTP configuration
+  // Standard Custom SMTP configuration
   return nodemailer.createTransport({
-    host: host || 'smtp.gmail.com',
+    host: host,
     port: port,
-    secure: port === 465, // true for 465, false for 587 / other ports
+    secure: port === 465,
     auth: {
       user,
       pass,
     },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
   });
+}
+
+/**
+ * Verifies the SMTP connection and returns diagnostic status.
+ */
+async function verifyConnection() {
+  const user = (process.env.EMAIL_USER || process.env.SMTP_USER || '').trim();
+  const rawPass = (process.env.EMAIL_PASS || process.env.SMTP_PASS || '').trim();
+  const pass = rawPass.replace(/\s+/g, '');
+  const adminEmail = process.env.ADMIN_EMAIL || user || 'blueneedle3@gmail.com';
+
+  if (!user || !pass) {
+    return {
+      configured: false,
+      reason: 'Missing EMAIL_USER or EMAIL_PASS environment variables.',
+      details: {
+        hasEmailUser: Boolean(user),
+        hasEmailPass: Boolean(pass),
+        userEmail: user || null,
+        adminRecipient: adminEmail,
+      },
+      hint: 'Please set EMAIL_USER (e.g. blueneedle3@gmail.com) and EMAIL_PASS (16-char App Password) in your Vercel Environment Variables or backend/.env file.',
+    };
+  }
+
+  const transporter = getTransporter();
+  try {
+    await transporter.verify();
+    return {
+      configured: true,
+      verified: true,
+      user: user,
+      adminRecipient: adminEmail,
+      message: 'SMTP credentials verified successfully! Email sending is active.',
+    };
+  } catch (error) {
+    console.error('[Email Service] SMTP verification failed:', error);
+    return {
+      configured: true,
+      verified: false,
+      user: user,
+      adminRecipient: adminEmail,
+      error: error.message,
+      code: error.code || null,
+      response: error.response || null,
+      hint: error.message && error.message.includes('535')
+        ? 'Google rejected the login. Please ensure you are using a 16-character Google App Password (not your personal account password) and that 2-Step Verification is enabled at https://myaccount.google.com/apppasswords'
+        : 'Could not connect to SMTP server. Please verify your internet connection and SMTP configuration.',
+    };
+  }
 }
 
 /**
@@ -44,14 +111,20 @@ function getTransporter() {
  */
 async function sendInquiryNotification(inquiry) {
   const transporter = getTransporter();
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER || process.env.SMTP_USER || 'blueneedle3@gmail.com';
-  const senderEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER || process.env.SMTP_USER || adminEmail;
+  const adminEmail = (process.env.ADMIN_EMAIL || process.env.EMAIL_USER || process.env.SMTP_USER || 'blueneedle3@gmail.com').trim();
+  const senderEmail = (process.env.EMAIL_FROM || process.env.EMAIL_USER || process.env.SMTP_USER || adminEmail).trim();
 
   if (!transporter) {
+    const user = process.env.EMAIL_USER || process.env.SMTP_USER;
+    const pass = process.env.EMAIL_PASS || process.env.SMTP_PASS;
     console.warn(
-      `[Email Service] SMTP credentials not fully configured (EMAIL_USER/EMAIL_PASS). Email for inquiry #${inquiry.id} was not sent.`
+      `[Email Service] SMTP credentials not configured (EMAIL_USER: ${Boolean(user)}, EMAIL_PASS: ${Boolean(pass)}). Email for inquiry #${inquiry.id} was not sent.`
     );
-    return { success: false, reason: 'SMTP credentials not configured' };
+    return {
+      success: false,
+      reason: 'SMTP credentials not configured (EMAIL_USER or EMAIL_PASS missing in environment)',
+      recipient: adminEmail,
+    };
   }
 
   const inqRef = `INQ-${String(inquiry.id).padStart(4, '0')}`;
@@ -193,11 +266,11 @@ Reply directly to this email to contact ${inquiry.email}.
       html: htmlContent,
     });
 
-    console.log(`[Email Service] Admin notification sent successfully: ${info.messageId}`);
-    return { success: true, messageId: info.messageId };
+    console.log(`[Email Service] Admin notification sent successfully: ${info.messageId} to ${adminEmail}`);
+    return { success: true, messageId: info.messageId, recipient: adminEmail };
   } catch (error) {
     console.error('[Email Service] Error sending inquiry notification email:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error.message, recipient: adminEmail };
   }
 }
 
@@ -207,8 +280,8 @@ Reply directly to this email to contact ${inquiry.email}.
  */
 async function sendCustomerConfirmation(inquiry) {
   const transporter = getTransporter();
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER || process.env.SMTP_USER || 'blueneedle3@gmail.com';
-  const senderEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER || process.env.SMTP_USER || adminEmail;
+  const adminEmail = (process.env.ADMIN_EMAIL || process.env.EMAIL_USER || process.env.SMTP_USER || 'blueneedle3@gmail.com').trim();
+  const senderEmail = (process.env.EMAIL_FROM || process.env.EMAIL_USER || process.env.SMTP_USER || adminEmail).trim();
 
   if (!transporter || !inquiry.email) {
     return { success: false, reason: 'Transporter not ready or missing customer email' };
@@ -287,4 +360,5 @@ function escapeHtml(str) {
 module.exports = {
   sendInquiryNotification,
   sendCustomerConfirmation,
+  verifyConnection,
 };
