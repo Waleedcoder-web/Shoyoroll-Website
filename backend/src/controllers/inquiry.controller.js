@@ -1,8 +1,9 @@
 const db = require('../config/db');
+const emailService = require('../services/email.service');
 
 async function createInquiry(req, res, next) {
   try {
-    const { name, email, phone, company, product_interest, quantity, message } = req.body;
+    const { name, email, phone, company, country, product_interest, quantity, message } = req.body;
 
     if (!name || !email) {
       return res.status(400).json({
@@ -12,8 +13,8 @@ async function createInquiry(req, res, next) {
     }
 
     const insertSql = `
-      INSERT INTO inquiries (name, email, phone, company, product_interest, quantity, message)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO inquiries (name, email, phone, company, country, product_interest, quantity, message)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
     `;
 
@@ -22,17 +23,27 @@ async function createInquiry(req, res, next) {
       email,
       phone || null,
       company || null,
+      country || null,
       product_interest || null,
       quantity ? parseInt(quantity, 10) : null,
       message || null,
     ];
 
     const result = await db.query(insertSql, values);
+    const savedInquiry = result.rows[0];
+
+    // Trigger email notifications in the background
+    Promise.allSettled([
+      emailService.sendInquiryNotification(savedInquiry),
+      emailService.sendCustomerConfirmation(savedInquiry),
+    ]).catch((emailErr) => {
+      console.error('[Inquiry Controller] Email delivery error:', emailErr);
+    });
 
     res.status(201).json({
       success: true,
       message: 'Inquiry received successfully. Our team will get back to you shortly.',
-      data: result.rows[0],
+      data: savedInquiry,
     });
   } catch (error) {
     next(error);
